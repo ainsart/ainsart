@@ -118,18 +118,26 @@ class SeasonBadge extends TimeBadge {
     return `season-${this.start.epochMilliseconds}`;
   }
   get start() {
-    if (!this._start)
-      this._start = this.zdt.with({
-        month: 1,
-        day: 1,
-        hour: 0,
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-        microsecond: 0,
-        nanosecond: 0,
-      });
-    return this._start;
+    // 02-02 | Imbolc
+    // 03-21 | Ostara
+    // 05-01 | Beltane
+    // 06-21 | Litha
+    // 08-02 | Lughnasadh
+    // 09-23 | Mabon
+    // 10-31 | Samhain
+    // 12-21 | Yule
+    if (this._start) return this._start;
+
+    this._start = this.zdt.with({
+      month: 1,
+      day: 1,
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+      microsecond: 0,
+      nanosecond: 0,
+    });
   }
   get end() {
     if (!this._end)
