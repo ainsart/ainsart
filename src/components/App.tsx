@@ -542,19 +542,22 @@ export default function App() {
     if (!el) return;
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
-      if (e.deltaY === 0) return;
       const msPerPx = MS_PER_DAY / timeline.current.ppd;
-      timeline.current.zdt = timeline.current.zdt.add({
-        milliseconds: Math.round((e.clientX - timeline.current.x) * msPerPx),
-      });
-      timeline.current.x = e.clientX;
-      timeline.current.ppd = Math.max(
-        MIN_PPD,
-        Math.min(
-          MAX_PPD,
-          timeline.current.ppd * Math.exp(-e.deltaY * WHEEL_SENSITIVITY),
-        ),
-      );
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        timeline.current.zdt = timeline.current.zdt.add({
+          milliseconds: Math.round((e.clientX - timeline.current.x) * msPerPx),
+        });
+        timeline.current.x = e.clientX;
+        timeline.current.ppd = Math.max(
+          MIN_PPD,
+          Math.min(
+            MAX_PPD,
+            timeline.current.ppd * Math.exp(-e.deltaY * WHEEL_SENSITIVITY),
+          ),
+        );
+      } else {
+        timeline.current.zdt = timeline.current.zdt.add({milliseconds: Math.round(e.deltaX * msPerPx)})
+      }
       rerender();
     };
     el.addEventListener("wheel", handleWheel, { passive: false });
