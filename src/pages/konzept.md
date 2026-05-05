@@ -1,15 +1,11 @@
 ---
-layout: ../layouts/profile.astro
-title: david
-name: David Härer
-role: Softwareentwickler
-location: Göttingen
-avatar: "/2025-11-01 11.10.57.jpg"
+layout: ../layouts/page.astro
+title: Konzept
 ---
 
 ## Warum?
 
-> Von Menschen geschaffene Werke verdienen mehr Sichtbarkeit in unserer Gesellschaft.
+> Kunsthandwerk verdient mehr Sichtbarkeit in unserer Gesellschaft.
 
 Ich möchte Kunsthandwerkende und Künstler:innen dabei unterstützen von ihrer Arbeit zu leben.
 
