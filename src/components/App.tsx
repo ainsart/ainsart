@@ -113,6 +113,37 @@ class YearBadge extends TimeBadge {
   }
 }
 
+class SeasonBadge extends TimeBadge {
+  get id() {
+    return `season-${this.start.epochMilliseconds}`;
+  }
+  get start() {
+    if (!this._start)
+      this._start = this.zdt.with({
+        month: 1,
+        day: 1,
+        hour: 0,
+        minute: 0,
+        second: 0,
+        millisecond: 0,
+        microsecond: 0,
+        nanosecond: 0,
+      });
+    return this._start;
+  }
+  get end() {
+    if (!this._end)
+      this._end = this.start.add({ years: 1 }).subtract({ nanoseconds: 1 });
+    return this._end;
+  }
+  get next() {
+    return new SeasonBadge(this.zdt.add({ years: 1 }));
+  }
+  label(ppd: number) {
+    return String(this.zdt.year);
+  }
+}
+
 class MonthBadge extends TimeBadge {
   get id() {
     return `month-${this.start.epochMilliseconds}`;
