@@ -138,11 +138,11 @@
   --timeline-past: transparent;
   --timeline-past-fg: var(--color-gray-400);
   --timeline-past-border: transparent;
-  --timeline-present: var(--color-gray-800);
-  --timeline-present-fg: var(--color-gray-200);
+  --timeline-present: transparent;
+  --timeline-present-fg: var(--color-green-700);
   --timeline-present-border: var(--timeline-present);
-  --timeline-future: var(--color-gray-300);
-  --timeline-future-fg: var(--timeline-present);
+  --timeline-future: transparent;
+  --timeline-future-fg: var(--color-gray-700);
   --timeline-future-border: var(--timeline-future);
 }
 
@@ -181,11 +181,11 @@
   --timeline-past: transparent;
   --timeline-past-fg: var(--color-gray-500);
   --timeline-past-border: transparent;
-  --timeline-present: var(--color-gray-200);
-  --timeline-present-fg: var(--color-gray-800);
+  --timeline-present: transparent;
+  --timeline-present-fg: var(--color-green-600);
   --timeline-present-border: var(--timeline-present);
-  --timeline-future: var(--color-gray-700);
-  --timeline-future-fg: var(--timeline-present);
+  --timeline-future: transparent;
+  --timeline-future-fg: var(--color-gray-300);
   --timeline-future-border: var(--timeline-future);
 }
 
