@@ -587,7 +587,9 @@ export default function App() {
           ),
         );
       } else {
-        timeline.current.zdt = timeline.current.zdt.add({milliseconds: Math.round(e.deltaX * msPerPx)})
+        timeline.current.zdt = timeline.current.zdt.add({
+          milliseconds: Math.round(e.deltaX * msPerPx),
+        });
       }
       rerender();
     };
