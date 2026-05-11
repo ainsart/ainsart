@@ -3,37 +3,35 @@ layout: ../layouts/page.astro
 title: Konzept
 ---
 
-## Warum?
+# Das Ainsart Konzept
 
 > Kunsthandwerk verdient mehr Sichtbarkeit in unserer Gesellschaft.
 
-Ich möchte Kunsthandwerkende und Künstler:innen dabei unterstützen von ihrer Arbeit zu leben.
+Mit Ainsart möchte ich einen Knotenpunkt für Kunsthandwerk erschaffen -
+zwischen Endkunden, Kunsthandwerkern, Herstellern und Marktbetreibern.
 
-Meine Vision ist eine digitale Fußgängerzone, in der es einzigartiges zu entdecken gibt.
+Mein Name ist David Härer,
+ich bin Softwareentwickler
+und arbeite nebengewerblich seit Januar 2026 an dieser Vision.
 
-Die Plattform [ains.art](https://ains.art) betreibe ich im Nebengewerbe,
-hauptberuflich bin ich angestellter Softwareentwickler.
+## _ains.art_ - Die Plattform
 
-Jetzt lerne ich was es alles braucht, um diese Vision zu verwirklichen.
+> Entdecke einzigartiges in einer digitalen Fußgängerzone.
 
-Ich würde mich freuen, wenn du mich auf dieser Reise begleitest, denn am Ende war immer schon der Weg das Ziel.
+Auf [_ains.art_](https://ains.art) zeige ich eine Auswahl von Märkten, Kunsthandwerkenden und deren Werke.
+Die Ainsart Karte ist das Herzstück dieser Plattform.
 
-## LinkedIn Posts
+Entdecke Werkstätten und Ateliers in deiner Nähe.
+Finde die nächsten Märkte in deiner Region.
+Kontaktiere Kunsthandwerkende und gelange zu deren Shop.
+Suche auf [_ains.art_](https://ains.art) nach bestimmten Produkten.
 
-### [Wie nenne ich mich auf Social Media?](https://www.linkedin.com/feed/update/urn:li:activity:7453194637000978434)
+## _ainsartig_ - Das Magazin
 
-Ich habe ein Problem, vielleicht kennt ihr es ja 🤷
+> Kunsthandwerkende haben eine einzigartige Sichtweise.
 
-Ich bin stolzer Besitzer der Domain [ains.art](https://ains.art) und konnte mir auf YouTube, Pinterest und LinkedIn den Username "@ainsart" sichern 🙂
+Es ist noch nicht alles gesagt. Wenn Kunsthandwerkende erzählen, lohnt es sich zuzuhören.
+Mit _ainsartig_ möchte ich erfahren, was Kunsthandwerkende zu sagen haben.
 
-Aber was ist mit Instagram? Sowohl "@ainsart" als auch "@ains.art" waren bereits vergeben 🤔
-
-Nach einigem hin und her mit einem Zwischenstopp bei "@ainsart.eu" bin ich nun bei ["@ainsartig"](https://instagram.com/ainsartig) gelandet und bin damit auch ganz happy 😌
-
-Doch jetzt habe ich unterschiedliche Nutzernamen auf den verschiedenen Socials. Auch nicht so optimal für die Identität über Plattformen hinweg 🤨
-
-Was würdet ihr machen? Die anderen Kanäle auch auf "@ainsartig" umstellen, oder wo es geht bei "@ainsart" bleiben, weil es am nächsten an der Domain ist 🙋
-
-Und wie sieht es eigentlich auf Facebook aus? Ich habe dort auch eine Seite, fühle mich auf der Plattform aber noch ziemlich verloren ... 🙃
-
-~ David, 2026-04-23
+Das _ainsartig_ Magazin gibt es als Podcast, Blog und auf Social Media.
+Das Kunsthandwerker ist der rote Faden, der sich durch alle Episoden zieht.
