@@ -18,8 +18,8 @@ und arbeite nebengewerblich seit Januar 2026 an dieser Vision.
 
 > Entdecke einzigartiges in einer digitalen Fußgängerzone.
 
-Auf [_ains.art_](https://ains.art) zeige ich eine Auswahl von Märkten, Kunsthandwerkenden und deren Werke.
-Die Ainsart Karte ist das Herzstück dieser Plattform.
+Auf [_ains.art_](https://ains.art) findest du eine Auswahl von Märkten, Kunsthandwerkenden und deren Werke.
+Die Karte und der Kalender sind das Herzstück dieser Plattform.
 
 Entdecke Werkstätten und Ateliers in deiner Nähe.
 Finde die nächsten Märkte in deiner Region.
