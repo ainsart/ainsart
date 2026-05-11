@@ -708,10 +708,10 @@ export default function App() {
 
   const visibleEventBadges = visibleEvents.flatMap((e) => e.badges);
 
-  const p = 4;
+  const p = 6;
   const h = 22;
   return (
-    <main className="h-[calc(100dvh-40px-4px-22px-4px-22px-4px-22px-4px)]">
+    <main className="h-[calc(100dvh-40px-6px-22px-6px-22px-6px-22px-6px)]">
       <div ref={mapRef} className="w-full h-full select-none" />
       <div
         ref={containerRef}
