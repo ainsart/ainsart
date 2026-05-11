@@ -162,9 +162,8 @@ src/
 ### Tailwind CSS v4
 
 - Use `@theme` for custom color definitions
-- Custom CSS variables in `:root` and `.dark`
+- Custom CSS variables in `:root`
 - OKLCH color format preferred
-- Dark mode uses `.dark` class on `<html>` element
 
 ## Important Notes
 

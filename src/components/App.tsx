@@ -31,7 +31,7 @@ function slug(text: string): string {
 }
 
 abstract class TimeBadge {
-  constructor(protected zdt: Temporal.ZonedDateTime) {}
+  constructor(protected zdt: Temporal.ZonedDateTime) { }
 
   protected _start?: Temporal.ZonedDateTime;
   protected _end?: Temporal.ZonedDateTime;
@@ -343,7 +343,7 @@ class Event {
     readonly badges: EventBadge[],
     readonly latlng: LatLngExpression,
     readonly organizer: string,
-  ) {}
+  ) { }
   get id(): string {
     return slug(this.title);
   }
@@ -715,7 +715,7 @@ export default function App() {
       <div ref={mapRef} className="w-full h-full select-none" />
       <div
         ref={containerRef}
-        className={`w-full h-[${3 * h + 4 * p}px] overflow-hidden select-none cursor-grab border-solid border-gray-300 dark:border-gray-700`}
+        className={`w-full h-[${3 * h + 4 * p}px] overflow-hidden select-none cursor-grab border-solid border-gray-300`}
         style={{
           touchAction: "none",
           willChange: "transform",
@@ -737,7 +737,7 @@ export default function App() {
               height={h}
             >
               <div className="w-full h-full flex items-center justify-center">
-                <Badge className="flex w-full h-full bg-green-300 text-transparent border-[3px] border-green-600 box-border box-border rounded-full dark:border-gray-100 dark:bg-green-600">
+                <Badge className="flex w-full h-full bg-green-300 text-transparent border-[3px] border-green-600 box-border box-border rounded-full">
                   {badge.label(layout.ppd)}
                 </Badge>
               </div>
