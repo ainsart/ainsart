@@ -1,6 +1,6 @@
 # AGENTS.md - ains.art
 
-Astro 5 + React 19 + Tailwind CSS 4 + shadcn/ui project. Event map and timeline visualization app.
+Astro 5 + React 19 + Tailwind CSS 4 + shadcn/ui. Event map and timeline visualization app.
 
 ## Commands
 
@@ -8,14 +8,12 @@ Astro 5 + React 19 + Tailwind CSS 4 + shadcn/ui project. Event map and timeline 
 bun run dev        # Dev server on http://localhost:4321
 bun run build      # Production build
 bun run preview    # Preview production build
-
-# TypeScript & formatting
-bunx astro check             # Type check
+bunx astro check   # TypeScript type check
 bunx prettier --write .      # Format all files
 bunx prettier --write <file> # Format single file
 ```
 
-No test runner or ESLint is configured.
+No test runner, ESLint, or lint scripts are configured. There are no tests to run.
 
 ## Tech Stack
 
@@ -23,7 +21,7 @@ No test runner or ESLint is configured.
 - **Styling**: Tailwind CSS 4 (`@theme`, `@import "tailwindcss"`)
 - **UI**: shadcn/ui (radix-ui + class-variance-authority)
 - **Gestures**: @use-gesture/react for drag, wheel, pinch
-- **Maps**: Leaflet with custom `divIcon` markers
+- **Maps**: MapLibre GL JS with OpenFreeMap vector tiles (imperative API via refs)
 - **Time**: @js-temporal/polyfill for date/time handling
 - **Format**: Prettier with prettier-plugin-astro and prettier-plugin-tailwindcss
 
@@ -31,7 +29,7 @@ No test runner or ESLint is configured.
 
 ### Formatting
 
-- No semicolons at end of statements
+- No semicolons at end of statements (imports are the exception)
 - Double quotes for strings
 - 2 spaces indentation
 - Trailing commas in objects/arrays
@@ -45,7 +43,7 @@ import { useState, useRef, useCallback } from "react";
 
 // Third-party libraries
 import { Temporal } from "@js-temporal/polyfill";
-import L from "leaflet";
+import maplibregl from "maplibre-gl";
 
 // Internal aliases (@/* maps to ./src/*)
 import { cn } from "@/lib/utils";
@@ -73,7 +71,12 @@ import "../styles/global.css";
 - Path aliases: `@/components`, `@/lib/utils`, etc.
 - Use `readonly` for immutable properties
 
-### Component Patterns
+### Error Handling
+
+- Use guard clauses for missing refs / null checks (`if (!el) return`)
+- Use optional chaining for cleanup (`mapInstance.current?.remove()`)
+- Avoid try/catch unless dealing with external APIs or user input
+- Prefer early returns over nested conditionals
 
 ```typescript
 // Function components with inferred return type
@@ -88,18 +91,14 @@ export { Button, buttonVariants }
 #### cva Pattern
 
 ```typescript
-const buttonVariants = cva("base-classes", {
+const badgeVariants = cva("base-classes", {
   variants: {
     variant: {
       default: "bg-primary text-primary-foreground",
     },
-    size: {
-      default: "h-9 px-4",
-    },
   },
   defaultVariants: {
     variant: "default",
-    size: "default",
   },
 });
 ```
@@ -108,7 +107,7 @@ const buttonVariants = cva("base-classes", {
 
 ```astro
 ---
-import '../styles/global.css'
+import "../styles/global.css"
 const { content } = Astro.props
 ---
 
@@ -123,7 +122,7 @@ const { content } = Astro.props
 src/
 ├── components/
 │   ├── ui/              # shadcn/ui components
-│   ├── App.tsx          # Main React app
+│   ├── App.tsx          # Main React app (client:only="react")
 │   ├── Header.astro
 │   └── Footer.astro
 ├── layouts/
@@ -169,9 +168,11 @@ src/
 
 - **No tests** - this project has no test runner configured
 - **No ESLint** - relies on Prettier for formatting
+- **No Cursor/Copilot rules** - no `.cursorrules`, `.cursor/rules/`, or `.github/copilot-instructions.md` found
 - Tailwind CSS v4 uses `@theme` syntax (no `tailwind.config.js`)
 - Astro config uses `trailingSlash: "never"`
+- Date formatting uses German locale (`de-DE`)
 
 ---
 
-_Last updated: 2026-04-21_
+_Last updated: 2026-05-12_

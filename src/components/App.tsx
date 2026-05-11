@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Temporal } from "@js-temporal/polyfill";
 import { Badge } from "@/components/ui/badge";
-import L, { type LatLngExpression } from "leaflet";
-import "leaflet/dist/leaflet.css";
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
-const LAT_LONG_GOE = [51.541, 9.936];
+const LNG_LAT_GOE = [9.936, 51.541];
 const TIME_ZERO = {
   hour: 0,
   minute: 0,
@@ -138,6 +138,7 @@ class SeasonBadge extends TimeBadge {
       microsecond: 0,
       nanosecond: 0,
     });
+    return this._start;
   }
   get end() {
     if (!this._end)
@@ -341,14 +342,14 @@ class Event {
     readonly place: string,
     readonly url: string,
     readonly badges: EventBadge[],
-    readonly latlng: LatLngExpression,
+    readonly lnglat: [number, number],
     readonly organizer: string,
   ) { }
   get id(): string {
     return slug(this.title);
   }
   isVisible(
-    mapBounds: L.LatLngBounds | null,
+    mapBounds: maplibregl.LngLatBounds | null,
     startMs: number,
     endMs: number,
   ): boolean {
@@ -359,18 +360,9 @@ class Event {
     );
     if (!hasTimeOverlap) return false;
     if (mapBounds) {
-      return mapBounds.contains(this.latlng);
+      return mapBounds.contains(this.lnglat as maplibregl.LngLatLike);
     }
     return true;
-  }
-  getMarkerPopupHTML(): string {
-    return `
-      <div style="min-width: 200px;">
-        <strong>${this.title}</strong><br/>
-        <small>${this.place}</small><br/>
-        <small>Organizer: ${this.organizer}</small>
-      </div>
-    `;
   }
 }
 
@@ -391,7 +383,7 @@ const EVENTS: Event[] = [
         "Keramikmarkt Paderborn",
       ),
     ],
-    [51.7459595, 8.7104291],
+    [8.7104291, 51.7459595],
     "Schlosspark und Lippesee Gesellschaft",
   ),
 ];
@@ -423,16 +415,6 @@ function generateBadges(
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  window.debugLog = (msg: string) => {
-    const el =
-      document.getElementById("debug") || document.createElement("div");
-    el.id = "debug";
-    el.style.cssText =
-      "position:fixed;top:0;left:0;right:0;background:#000;color:#0f0;font:12px monospace;z-index:9999;max-height:200px;overflow:auto;";
-    if (!el.parentNode) document.body.appendChild(el);
-    el.innerHTML = `<div>${msg}</div>`;
-  };
-
   const timeline = useRef({
     x: typeof window !== "undefined" ? window.innerWidth * 0.25 : 300,
     zdt: Temporal.Now.zonedDateTimeISO(),
@@ -440,7 +422,7 @@ export default function App() {
   });
 
   const map = useRef({
-    center: LAT_LONG_GOE,
+    center: LNG_LAT_GOE,
     zoom: 10,
   });
 
@@ -632,31 +614,33 @@ export default function App() {
 
   const layout = computeLayout();
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstance = useRef<L.Map | null>(null);
+  const mapInstance = useRef<maplibregl.Map | null>(null);
 
   useEffect(() => {
     if (!mapRef.current || mapInstance.current) return;
-    mapInstance.current = L.map(mapRef.current, {
-      center: map.current.center as L.LatLngTuple,
+    mapInstance.current = new maplibregl.Map({
+      container: mapRef.current,
+      style: "https://tiles.openfreemap.org/styles/liberty",
+      center: map.current.center as [number, number],
       zoom: map.current.zoom,
-      zoomControl: false,
     });
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution:
-        '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(mapInstance.current);
-    const latLngs = EVENTS.map((e) => e.latlng);
-    const bounds = L.latLngBounds(latLngs);
-
-    mapInstance.current.fitBounds(bounds, { padding: [50, 50], maxZoom: 10 });
+    const lngLats = EVENTS.map((e) => e.lnglat);
+    const bounds = new maplibregl.LngLatBounds(
+      lngLats[0] as maplibregl.LngLatLike,
+      lngLats[0] as maplibregl.LngLatLike,
+    );
+    lngLats.slice(1).forEach((lngLat) => {
+      bounds.extend(lngLat as maplibregl.LngLatLike);
+    });
+    mapInstance.current.fitBounds(bounds, { padding: 50, maxZoom: 10 });
     return () => {
       mapInstance.current?.remove();
       mapInstance.current = null;
     };
   }, [map.current.center, map.current.zoom]);
 
-  const eventMarkersRef = useRef<L.Marker[]>([]);
-  const [bounds, setBounds] = useState<L.LatLngBounds | null>(null);
+  const eventMarkersRef = useRef<maplibregl.Marker[]>([]);
+  const [bounds, setBounds] = useState<maplibregl.LngLatBounds | null>(null);
 
   useEffect(() => {
     if (!mapInstance.current) return;
@@ -668,9 +652,11 @@ export default function App() {
 
     updateBounds();
 
-    m.on("moveend zoomend", updateBounds);
+    m.on("moveend", updateBounds);
+    m.on("zoomend", updateBounds);
     return () => {
-      m.off("moveend zoomend", updateBounds);
+      m.off("moveend", updateBounds);
+      m.off("zoomend", updateBounds);
     };
   }, []);
 
@@ -693,15 +679,12 @@ export default function App() {
     eventMarkersRef.current = [];
 
     visibleEvents.forEach((event) => {
-      const icon = L.divIcon({
-        className: "event-marker",
-        html: `<div class=""></div>`,
-        iconSize: [22, 22],
-        iconAnchor: [14, 14],
-      });
-      const marker = L.marker(event.latlng, { icon })
-        .addTo(mapInstance.current!)
-        .bindPopup(event.title);
+      const el = document.createElement("div");
+      el.className = "event-marker";
+      const marker = new maplibregl.Marker({ element: el })
+        .setLngLat(event.lnglat as [number, number])
+        .setPopup(new maplibregl.Popup().setText(event.title))
+        .addTo(mapInstance.current!);
       eventMarkersRef.current.push(marker);
     });
   }, [visibleEvents]);

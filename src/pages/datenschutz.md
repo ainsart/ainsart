@@ -28,7 +28,7 @@ Diese Daten sind technisch notwendig, um die Website anzuzeigen und die Stabilit
 
 ### 2.2 Externe Dienste
 
-**OpenStreetMap / Leaflet:** Die Kartenfunktion nutzt OpenStreetMap-Daten über die Leaflet-Bibliothek. Beim Laden der Karten werden Anfragen an OpenStreetMap-Server gesendet, wodurch Ihre IP-Adresse übermittelt werden kann.
+**OpenFreeMap / MapLibre GL JS:** Die Kartenfunktion nutzt OpenStreetMap-Daten über OpenFreeMap-Vektorkacheln, die mit der MapLibre GL JS-Bibliothek gerendert werden. Beim Laden der Karten werden Anfragen an OpenFreeMap-Server gesendet, wodurch Ihre IP-Adresse übermittelt werden kann.
 
 ## 3. Speicherdauer
 
