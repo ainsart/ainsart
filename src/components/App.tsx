@@ -720,7 +720,7 @@ export default function App() {
               height={h}
             >
               <div className="w-full h-full flex items-center justify-center">
-                <Badge className="flex w-full h-full bg-green-300 text-transparent border-[3px] border-green-600 box-border box-border rounded-full">
+                <Badge variant="event" className="flex w-full h-full">
                   {badge.label(layout.ppd)}
                 </Badge>
               </div>
