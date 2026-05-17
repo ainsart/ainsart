@@ -9,6 +9,7 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
+        event: "bg-transparent border-green-600 text-gray-600",
         default: "bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
         past: "bg-timeline-past border-timeline-past-border text-timeline-past-fg [a&]:hover:bg-primary/90",
         present: "bg-timeline-present border-timeline-present-border text-timeline-present-fg [a&]:hover:bg-primary/90",
