@@ -1,9 +1,26 @@
 ---
 layout: ../layouts/page.astro
-title: Konzept
+title: Strategie
 ---
 
-# Das Ainsart Konzept
+# Die Ainsart Strategie
+
+## Wer bin ich?
+
+Mein Name ist David Härer.
+Ich bin ein 31 jähriger Familienvater und arbeite als Softwareentwickler.
+Ainsart betreibe ich mit 10 Stunden pro Woche im Nebengewerbe.
+
+## Was will ich?
+
+Mit Ainsart möchte ich Menschen unterstützen, die.
+Dies umfasst Kunsthandwerker, Künstler
+
+## Was sind meine Stärken und Schwächen?
+
+## Was sind meine Überzeugungen?
+
+## Wie will
 
 > Kunsthandwerk verdient mehr Sichtbarkeit in unserer Gesellschaft.
 
