@@ -3,7 +3,7 @@ import Nav from "@/components/Nav.tsx"
 ---
 
 <header
-  class="container h-[40px] flex justify-between px-2"
+  class="container flex justify-between px-2"
 >
-  <Nav client:load />
+  <Nav client:only="react" />
 </header>

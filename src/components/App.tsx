@@ -3,6 +3,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import { Badge } from "@/components/ui/badge";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import Nav from "../components/Nav";
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const LNG_LAT_GOE = [9.936, 51.541];
@@ -31,7 +32,7 @@ function slug(text: string): string {
 }
 
 abstract class TimeBadge {
-  constructor(protected zdt: Temporal.ZonedDateTime) { }
+  constructor(protected zdt: Temporal.ZonedDateTime) {}
 
   protected _start?: Temporal.ZonedDateTime;
   protected _end?: Temporal.ZonedDateTime;
@@ -344,7 +345,7 @@ class Event {
     readonly badges: EventBadge[],
     readonly lnglat: [number, number],
     readonly organizer: string,
-  ) { }
+  ) {}
   get id(): string {
     return slug(this.title);
   }
@@ -694,8 +695,15 @@ export default function App() {
   const p = 6;
   const h = 22;
   return (
-    <main className="h-[calc(100dvh-40px-6px-22px-6px-22px-6px-22px-6px)]">
-      <div ref={mapRef} className="w-full h-full select-none" />
+    <main className="h-[100dvh] relative">
+      <div
+        ref={mapRef}
+        className="w-full select-none"
+        style={{ height: `calc(100dvh - ${3 * h + 4 * p}px)` }}
+      />
+      <div className="absolute top-2 left-2 z-10 border border-gray-300 rounded-md">
+        <Nav />
+      </div>
       <div
         ref={containerRef}
         className={`w-full h-[${3 * h + 4 * p}px] overflow-hidden select-none cursor-grab border-solid border-gray-300`}
