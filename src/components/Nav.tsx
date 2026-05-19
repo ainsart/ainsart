@@ -43,6 +43,7 @@ export default function Nav() {
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
+      <a href="/impressum">Impressum</a>
     </nav>
   );
 }
