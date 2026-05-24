@@ -3,7 +3,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import { Badge } from "@/components/ui/badge";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import Nav from "../components/Nav";
+import Ainsart from "../components/Ainsart";
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const LNG_LAT_GOE = [9.936, 51.541];
@@ -413,7 +413,7 @@ function generateBadges(
   return badges;
 }
 
-export default function App() {
+export default function Karte() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const timeline = useRef({
@@ -701,9 +701,7 @@ export default function App() {
         className="w-full select-none"
         style={{ height: `calc(100dvh - ${3 * h + 4 * p}px)` }}
       />
-      <div className="absolute top-2 left-2 z-10 border border-gray-300 rounded-md">
-        <Nav />
-      </div>
+      <Ainsart />
       <div
         ref={containerRef}
         className={`w-full h-[${3 * h + 4 * p}px] overflow-hidden select-none cursor-grab border-solid border-gray-300`}
