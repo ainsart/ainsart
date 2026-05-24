@@ -537,14 +537,16 @@ export default function Karte() {
         const dy = e.clientY - lastDragY;
         lastDragX = e.clientX;
         lastDragY = e.clientY;
-        timeline.current.x = timeline.current.x + dx;
-        timeline.current.ppd = Math.max(
-          MIN_PPD,
-          Math.min(
-            MAX_PPD,
-            timeline.current.ppd * Math.exp(dy * TOUCH_SENSITIVITY),
-          ),
-        );
+        if (Math.abs(dx) > Math.abs(dy))
+          timeline.current.x = timeline.current.x + dx;
+        else
+          timeline.current.ppd = Math.max(
+            MIN_PPD,
+            Math.min(
+              MAX_PPD,
+              timeline.current.ppd * Math.exp(dy * TOUCH_SENSITIVITY),
+            ),
+          );
         rerender();
       }
     };
@@ -704,19 +706,18 @@ export default function Karte() {
 
   const visibleEventBadges = visibleEvents.flatMap((e) => e.badges);
 
-  const p = 6;
-  const h = 24;
+  const h = 30;
   return (
     <main className="h-[100dvh] relative">
       <div
         ref={mapRef}
         className="w-full select-none"
-        style={{ height: `calc(100dvh - ${3 * h + 4 * p}px)` }}
+        style={{ height: `calc(100dvh - ${3 * h}px)` }}
       />
-      <Ainsart />
+      <Ainsart center={false} />
       <div
         ref={containerRef}
-        className={`w-full h-[${3 * h + 4 * p}px] overflow-hidden select-none cursor-grab border-solid border-gray-300`}
+        className={`w-full h-[${3 * h}px] overflow-hidden select-none cursor-grab border-solid border-gray-300`}
         style={{
           touchAction: "none",
           willChange: "transform",
@@ -725,20 +726,28 @@ export default function Karte() {
       >
         <svg
           width={getVisibleWidth()}
-          height={3 * h + 4 * p}
+          height={3 * h}
           className="block"
           style={{ backgroundColor: "transparent" }}
         >
+          <line
+            x1={0}
+            y1={2 * h}
+            x2={getVisibleWidth()}
+            y2={2 * h}
+            className="stroke-gray-300"
+            strokeWidth={1}
+          />
           {visibleEventBadges.map((badge) => (
             <foreignObject
               key={badge.id}
               x={badge.x(layout.startMilliseconds, layout.ppd)}
-              y={p + 1}
+              y={0}
               width={badge.width(layout.ppd)}
               height={h}
             >
-              <div className="w-full flex items-center justify-center">
-                <Badge variant="event" className="flex w-full h-full">
+              <div className={`w-full h-full flex items-center justify-center`}>
+                <Badge variant="event" className="flex w-full h-[22px]">
                   {badge.label(layout.ppd)}
                 </Badge>
               </div>
@@ -746,35 +755,57 @@ export default function Karte() {
           ))}
 
           {layout.bottom.map((badge) => (
-            <foreignObject
-              key={badge.id}
-              x={badge.x(layout.startMilliseconds, layout.ppd)}
-              y={2 * p + h}
-              width={badge.width(layout.ppd)}
-              height={h}
-            >
-              <div
-                className={`w-full flex items-center justify-center text-sm ${badge.isPast(layout.nowMilliseconds) ? "text-timeline-past-fg" : "text-timeline-future-fg"}`}
+            <>
+              <foreignObject
+                key={badge.id}
+                x={badge.x(layout.startMilliseconds, layout.ppd)}
+                y={h}
+                width={badge.width(layout.ppd)}
+                height={h}
               >
-                {badge.label(layout.ppd)}
-              </div>
-            </foreignObject>
+                <div
+                  className={`w-full h-full flex items-center justify-center text-sm ${badge.isPast(layout.nowMilliseconds) ? "text-timeline-past-fg" : "text-timeline-future-fg"}`}
+                >
+                  {badge.label(layout.ppd)}
+                </div>
+              </foreignObject>
+              <line
+                key={"line-" + badge.id}
+                x1={badge.x(layout.startMilliseconds, layout.ppd)}
+                y1={1.38 * h}
+                x2={badge.x(layout.startMilliseconds, layout.ppd)}
+                y2={2 * h}
+                className="stroke-gray-300"
+                strokeWidth={1}
+              />
+            </>
           ))}
 
           {layout.top.map((badge) => (
-            <foreignObject
-              key={badge.id}
-              x={badge.x(layout.startMilliseconds, layout.ppd)}
-              y={3 * p + 2 * h}
-              width={badge.width(layout.ppd)}
-              height={h}
-            >
-              <div
-                className={`w-full flex items-center justify-center text-sm ${badge.isPast(layout.nowMilliseconds) ? "text-timeline-past-fg" : "text-timeline-future-fg"}`}
+            <>
+              <foreignObject
+                key={badge.id}
+                x={badge.x(layout.startMilliseconds, layout.ppd)}
+                y={2 * h}
+                width={badge.width(layout.ppd)}
+                height={h}
               >
-                {badge.label(layout.ppd)}
-              </div>
-            </foreignObject>
+                <div
+                  className={`w-full h-full flex items-center justify-center text-sm ${badge.isPast(layout.nowMilliseconds) ? "text-timeline-past-fg" : "text-timeline-future-fg"}`}
+                >
+                  {badge.label(layout.ppd)}
+                </div>
+              </foreignObject>
+              <line
+                key={"line-" + badge.id}
+                x1={badge.x(layout.startMilliseconds, layout.ppd)}
+                y1={2 * h}
+                x2={badge.x(layout.startMilliseconds, layout.ppd)}
+                y2={2.62 * h}
+                className="stroke-gray-300"
+                strokeWidth={1}
+              />
+            </>
           ))}
         </svg>
       </div>
