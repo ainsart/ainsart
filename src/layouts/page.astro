@@ -2,14 +2,14 @@
 import "../styles/global.css";
 const { content } = Astro.props;
 import Main from "./main.astro";
-import Header from "../components/Header.astro";
+import Ainsart from "../components/Ainsart";
 import Footer from "../components/Footer.astro";
 ---
 
 <Main content={{ title: content.title }}>
   <body class:list={["bg-background flex h-screen flex-col", "overflow-auto"]}>
-    <Header />
-    <main class="container mx-auto max-w-2xl px-4 py-8">
+    <main class="container mx-auto max-w-2xl px-4 py-8 mt-12">
+      <Ainsart />
       <article class="prose prose-stone">
         <slot />
       </article>
