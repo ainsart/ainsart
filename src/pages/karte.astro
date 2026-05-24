@@ -3,11 +3,11 @@ import "../styles/global.css";
 import Main from "../layouts/main.astro";
 const { content } = Astro.props;
 import Footer from "../components/Footer.astro";
-import App from "../components/App";
+import Karte from "../components/Karte";
 ---
 
 <Main content={{ title: "ains.art" }}>
   <body class="bg-background fixed inset-0 flex h-dvh w-full overflow-hidden">
-    <App client:only="react" />
+    <Karte client:only="react" />
   </body>
 </Main>
