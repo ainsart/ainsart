@@ -470,7 +470,7 @@ export default function Karte() {
   }, [getVisibleWidth]);
 
   const WHEEL_SENSITIVITY = 0.002;
-  const TOUCH_SENSITIVITY = 0.004;
+  const TOUCH_SENSITIVITY = 0.008;
   const MIN_PPD = 1.2;
   const MAX_PPD = 2400;
 
@@ -753,19 +753,10 @@ export default function Karte() {
               width={badge.width(layout.ppd)}
               height={h}
             >
-              <div className="w-full h-full flex items-center justify-center">
-                <Badge
-                  variant={
-                    badge.isPast(layout.nowMilliseconds)
-                      ? "past"
-                      : badge.isFuture(layout.nowMilliseconds)
-                        ? "future"
-                        : "present"
-                  }
-                  className="flex w-full"
-                >
-                  {badge.label(layout.ppd)}
-                </Badge>
+              <div
+                className={`w-full flex items-center justify-center text-xs ${badge.isPast(layout.nowMilliseconds) ? "text-timeline-past-fg" : "text-timeline-future-fg"}`}
+              >
+                {badge.label(layout.ppd)}
               </div>
             </foreignObject>
           ))}
@@ -778,19 +769,10 @@ export default function Karte() {
               width={badge.width(layout.ppd)}
               height={h}
             >
-              <div className="w-full h-full flex items-center justify-center">
-                <Badge
-                  variant={
-                    badge.isPast(layout.nowMilliseconds)
-                      ? "past"
-                      : badge.isFuture(layout.nowMilliseconds)
-                        ? "future"
-                        : "present"
-                  }
-                  className="flex w-full"
-                >
-                  {badge.label(layout.ppd)}
-                </Badge>
+              <div
+                className={`w-full flex items-center justify-center text-xs ${badge.isPast(layout.nowMilliseconds) ? "text-timeline-past-fg" : "text-timeline-future-fg"}`}
+              >
+                {badge.label(layout.ppd)}
               </div>
             </foreignObject>
           ))}
@@ -799,3 +781,28 @@ export default function Karte() {
     </main>
   );
 }
+// <Badge
+//   variant={
+//     badge.isPast(layout.nowMilliseconds)
+//       ? "past"
+//       : badge.isFuture(layout.nowMilliseconds)
+//         ? "future"
+//         : "present"
+//   }
+//   className="flex w-full"
+// >
+// </Badge>
+// <div className="w-full h-full flex items-center justify-center">
+//   <Badge
+//     variant={
+//       badge.isPast(layout.nowMilliseconds)
+//         ? "past"
+//         : badge.isFuture(layout.nowMilliseconds)
+//           ? "future"
+//           : "present"
+//     }
+//     className="flex w-full"
+//   >
+//     {badge.label(layout.ppd)}
+//   </Badge>
+// </div>
