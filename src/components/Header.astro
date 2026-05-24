@@ -1,9 +1,8 @@
 ---
-import Nav from "@/components/Nav.tsx"
+import "../styles/global.css";
+import Ainsart from "./Ainsart";
 ---
 
-<header
-  class="container flex justify-between px-2"
->
-  <Nav client:only="react" />
+<header class="mx-auto max-w-2xl px-2 pt-4 pb-2 container flex justify-between">
+  <Ainsart />
 </header>
