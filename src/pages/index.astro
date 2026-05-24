@@ -1,0 +1,78 @@
+---
+import "../styles/global.css";
+import Main from "../layouts/main.astro";
+import Ainsart from "../components/Ainsart";
+import Footer from "../components/Footer.astro";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+---
+
+<Main content={{ title: "Ainsart" }}>
+  <body class:list={["bg-background flex h-screen flex-col", "overflow-auto"]}>
+    <main class="container mx-auto max-w-2xl px-4 py-8 mt-12">
+      <Ainsart />
+      <article class="prose prose-stone mb-12">
+        <h1>Ainsart ✌️</h1>
+        <blockquote>
+          Kunsthandwerk verdient mehr Sichtbarkeit in unserer Gesellschaft.
+        </blockquote>
+        <p>
+          Mein Name ist David Härer, ich bin Softwareentwickler und arbeite
+          nebengewerblich seit Januar 2026 an dieser Vision.
+        </p>
+      </article>
+
+      <div class="grid gap-4 sm:grid-cols-1">
+        <a href="/karte" class="group block no-underline">
+          <Card className="cursor-pointer">
+            <CardHeader>
+              <CardTitle
+                className="font-['Libre_Baskerville',_serif] group-hover:underline"
+              >
+                Karte
+              </CardTitle>
+              <CardDescription>
+                Finde Märkte, Werkstätten und Ateliers in deiner Nähe.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </a>
+
+        <!-- <a href="/konzept" class="group block no-underline"> -->
+        <!-- <Card className="cursor-pointer"> -->
+        <!-- <CardHeader> -->
+        <!-- <CardTitle -->
+        <!-- className="font-['Libre_Baskerville',_serif] group-hover:underline" -->
+        <!-- > -->
+        <!-- Blog -->
+        <!-- </CardTitle> -->
+        <!-- <CardDescription> -->
+        <!-- Gedanken und Einblicke rund um Kunsthandwerk und Ainsart. -->
+        <!-- </CardDescription> -->
+        <!-- </CardHeader> -->
+        <!-- </Card> -->
+        <!-- </a> -->
+
+        <!-- <a href="/linkedin" class="group block no-underline"> -->
+        <!-- <Card className="cursor-pointer"> -->
+        <!-- <CardHeader> -->
+        <!-- <CardTitle -->
+        <!-- className="font-['Libre_Baskerville',_serif] group-hover:underline" -->
+        <!-- > -->
+        <!-- Social -->
+        <!-- </CardTitle> -->
+        <!-- <CardDescription> -->
+        <!-- Folge Ainsart auf Instagram, YouTube, Pinterest und mehr. -->
+        <!-- </CardDescription> -->
+        <!-- </CardHeader> -->
+        <!-- </Card> -->
+        <!-- </a> -->
+      </div>
+    </main>
+    <Footer content={{ social: true }} />
+  </body>
+</Main>
