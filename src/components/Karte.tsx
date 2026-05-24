@@ -705,7 +705,7 @@ export default function Karte() {
   const visibleEventBadges = visibleEvents.flatMap((e) => e.badges);
 
   const p = 6;
-  const h = 22;
+  const h = 24;
   return (
     <main className="h-[100dvh] relative">
       <div
@@ -733,11 +733,11 @@ export default function Karte() {
             <foreignObject
               key={badge.id}
               x={badge.x(layout.startMilliseconds, layout.ppd)}
-              y={p}
+              y={p + 1}
               width={badge.width(layout.ppd)}
               height={h}
             >
-              <div className="w-full h-full flex items-center justify-center">
+              <div className="w-full flex items-center justify-center">
                 <Badge variant="event" className="flex w-full h-full">
                   {badge.label(layout.ppd)}
                 </Badge>
@@ -754,7 +754,7 @@ export default function Karte() {
               height={h}
             >
               <div
-                className={`w-full flex items-center justify-center text-xs ${badge.isPast(layout.nowMilliseconds) ? "text-timeline-past-fg" : "text-timeline-future-fg"}`}
+                className={`w-full flex items-center justify-center text-sm ${badge.isPast(layout.nowMilliseconds) ? "text-timeline-past-fg" : "text-timeline-future-fg"}`}
               >
                 {badge.label(layout.ppd)}
               </div>
@@ -770,7 +770,7 @@ export default function Karte() {
               height={h}
             >
               <div
-                className={`w-full flex items-center justify-center text-xs ${badge.isPast(layout.nowMilliseconds) ? "text-timeline-past-fg" : "text-timeline-future-fg"}`}
+                className={`w-full flex items-center justify-center text-sm ${badge.isPast(layout.nowMilliseconds) ? "text-timeline-past-fg" : "text-timeline-future-fg"}`}
               >
                 {badge.label(layout.ppd)}
               </div>
