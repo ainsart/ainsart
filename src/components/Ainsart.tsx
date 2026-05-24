@@ -1,9 +1,11 @@
 import "../styles/global.css";
 import { Badge } from "@/components/ui/badge";
 
-export default function Ainsart() {
+export default function Ainsart({ center = true }) {
   return (
-    <Badge className="fixed top-4 left-1/2 -translate-x-1/2 z-10 transition-colors hover:border-gray-200 border border-green-500 bg-gray-100 text-card-foreground shadow-sm hover:border-green-400 select-none">
+    <Badge
+      className={`absolute top-4 ${center ? "left-1/2 -translate-x-1/2" : "left-4"} z-10 transition-colors hover:border-gray-200 border border-green-500 bg-gray-100 text-card-foreground shadow-sm hover:border-green-400 select-none`}
+    >
       <a
         href="/"
         style={{ fontFamily: "'Libre Baskerville', serif" }}
