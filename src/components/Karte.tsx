@@ -470,6 +470,7 @@ export default function Karte() {
   }, [getVisibleWidth]);
 
   const WHEEL_SENSITIVITY = 0.002;
+  const TOUCH_SENSITIVITY = 0.004;
   const MIN_PPD = 1.2;
   const MAX_PPD = 2400;
 
@@ -481,6 +482,7 @@ export default function Karte() {
     let initialPinchDistance = 0;
     let initialPpd = 0;
     let lastDragX = 0;
+    let lastDragY = 0;
     const getDistance = (
       p1: { x: number; y: number },
       p2: { x: number; y: number },
@@ -506,6 +508,7 @@ export default function Karte() {
       el.setPointerCapture(e.pointerId);
       if (pointers.size === 1) {
         lastDragX = e.clientX;
+        lastDragY = e.clientY;
         setOrigin(e.clientX);
       } else if (pointers.size === 2) {
         isPinching = true;
@@ -531,8 +534,17 @@ export default function Karte() {
       } else if (!isPinching && pointers.size === 1) {
         e.preventDefault();
         const dx = e.clientX - lastDragX;
+        const dy = e.clientY - lastDragY;
         lastDragX = e.clientX;
+        lastDragY = e.clientY;
         timeline.current.x = timeline.current.x + dx;
+        timeline.current.ppd = Math.max(
+          MIN_PPD,
+          Math.min(
+            MAX_PPD,
+            timeline.current.ppd * Math.exp(dy * TOUCH_SENSITIVITY),
+          ),
+        );
         rerender();
       }
     };
