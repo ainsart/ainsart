@@ -27,73 +27,16 @@ No test runner, ESLint, or lint scripts. No tests to run.
 
 ## Code Style
 
-### Formatting
-
-- No semicolons at end of statements
-- Double quotes for strings
-- 2 spaces indentation
-- Trailing commas in objects/arrays
+- No semicolons, double quotes, 2 spaces indentation, trailing commas
 - Run `bunx prettier --write .` before committing
 
-### Imports
+**Imports** — React hooks first, then third-party, then `@/` aliases, CSS last (Astro files only).
 
+**Naming** — PascalCase components, camelCase utilities, kebab-case pages. Boolean props prefix with `is` or `has`.
+
+**Exports** — Named exports. Export component and variant separately for cva:
 ```typescript
-// React hooks first
-import { useState, useRef, useCallback } from "react";
-
-// Third-party libraries
-import { Temporal } from "@js-temporal/polyfill";
-import maplibregl from "maplibre-gl";
-
-// Internal aliases (@/* maps to ./src/*)
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-
-// CSS imports (Astro files only)
-import "../styles/global.css";
-```
-
-### Naming Conventions
-
-- **Components**: PascalCase (e.g., `Karte.tsx`, `Ainsart.tsx`)
-- **Utilities**: camelCase (e.g., `cn.ts`, `utils.ts`)
-- **Pages**: kebab-case or `index.astro` / `index.md`
-- **Classes**: PascalCase (e.g., `TimeBadge`, `EventBadge`)
-- **Constants**: UPPER_SNAKE_CASE (e.g., `MS_PER_DAY`)
-- **Types/Interfaces**: PascalCase with descriptive names
-- **Boolean props**: Prefix with `is` or `has`
-
-### TypeScript
-
-- Strict mode enabled (`astro/tsconfigs/strict`)
-- Explicit return types on exported functions
-- Path aliases: `@/components`, `@/lib/utils`, etc.
-- Use `readonly` for immutable properties
-
-### Error Handling
-
-- Guard clauses for missing refs / null checks (`if (!el) return`)
-- Optional chaining for cleanup (`mapInstance.current?.remove()`)
-- Avoid try/catch unless dealing with external APIs or user input
-- Prefer early returns over nested conditionals
-
-### Exports
-
-```typescript
-function Button({ className, variant = "default", ...props }: ButtonProps) {
-  return <button className={cn(buttonVariants({ variant }), className)} {...props} />
-}
-
 export { Button, buttonVariants }
-```
-
-### cva Pattern
-
-```typescript
-const badgeVariants = cva("base-classes", {
-  variants: { variant: { default: "bg-primary text-primary-foreground" } },
-  defaultVariants: { variant: "default" },
-});
 ```
 
 ## Project Structure
@@ -102,147 +45,132 @@ const badgeVariants = cva("base-classes", {
 src/
 ├── components/
 │   ├── ui/              # shadcn/ui components
-│   ├── Karte.tsx        # Map + timeline (client:only="react"), takes `events` prop
+│   ├── Karte.tsx        # Map + timeline (client:only="react")
 │   ├── Ainsart.tsx      # Branding badge (client:only="react")
 │   ├── Footer.astro
 │   └── Header.astro
 ├── layouts/
 │   ├── main.astro       # Base HTML layout
 │   ├── page.astro       # Content page wrapper (max-w-2xl prose)
-│   ├── profile.astro    # Artisan profile layout
-│   ├── markt-listing.astro   # Layout for /markt/ index
-│   ├── markt-organizer.astro # Layout for organizer pages
-│   └── markt-event.astro     # Layout for market edition pages
+│   ├── profile.astro    # Artisan profile layout (title=handle, name=display)
+│   └── markt-*.astro    # Organizer listing, organizer profile, event edition
 ├── lib/
 │   ├── utils.ts         # cn() utility
-│   └── events.ts        # Event, EventBadge classes + createEvents() factory + EventData type
+│   └── events.ts        # Event, EventBadge classes + createEvents() + EventData type
 ├── pages/
-│   ├── index.astro      # Homepage
-│   ├── karte.astro      # Map page — aggregates events from markdown, passes to <Karte>
-│   └── markt/
-│       ├── index.md                     # /markt/ — listing page
-│       └── {organizer}/
-│           ├── index.md                 # /markt/{organizer}/ — organizer profile
-│           └── {year}.md                # /markt/{organizer}/{year}/ — market edition
+│   ├── index.astro      # Homepage (links to /markt/ and /kunsthandwerkende)
+│   ├── karte.astro      # Map page — aggregates events, passes to <Karte>
+│   ├── markt/index.md   # /markt/ — listing page (finds all organizer pages)
+│   ├── @schlosspark-paderborn.md               # Organizer profile
+│   ├── @keramikmarkt-paderborn-2026.md          # Market edition (event)
+│   ├── @tito-keramik.md                         # Artisan profile
+│   └── *.md             # Static pages (impressum, datenschutz, etc.)
 └── styles/
     └── global.css       # Tailwind v4 config + theme
 ```
 
 ## Data Layer — READ THIS FIRST
 
-**There is no shared data file, no content collections, and no database.** All structured data lives in the frontmatter of markdown pages under `src/pages/markt/`.
+**No shared data file, no content collections, no database.** All structured data lives in the frontmatter of `@*.md` pages directly under `src/pages/`. Page type is determined by its layout, not its directory.
 
-### Data lives in `.md` frontmatter
-
-Organizer page (`src/pages/markt/paderborn/index.md`):
+### Organizer page (`@schlosspark-paderborn.md`)
 ```yaml
 ---
-layout: ../../../layouts/markt-organizer.astro
+layout: ../layouts/markt-organizer.astro
+slug: "paderborn"          # links to markets via organizer field
 name: "Schlosspark und Lippesee Gesellschaft"
 location: "Paderborn"
-website: "https://..."
+website: "https://www.schlosspark-paderborn.de"
 ---
 ```
 
-Market page (`src/pages/markt/paderborn/2026.md`):
+### Market edition page (`@keramikmarkt-paderborn-2026.md`)
 ```yaml
 ---
-layout: ../../../layouts/markt-event.astro
+layout: ../layouts/markt-event.astro
 title: "Keramikmarkt Paderborn"
 place: "Neuhäuser Schlosspark"
-url: "https://..."
+website: "https://www.paderborn.de/..."   # NOT "url" — reserved by Astro
 badges:
   - start: "2026-04-25T11:00+02:00[Europe/Berlin]"
     end: "2026-04-25T18:00+02:00[Europe/Berlin]"
     title: "Keramikmarkt Paderborn"
 lnglat: [8.7105392, 51.7453595]
-organizer: "paderborn"
+organizer: "paderborn"     # matches organizer's slug
 year: 2026
+artisans:
+  - "@tito-keramik"        # matches artisan filename (without .md)
+---
+```
+
+### Artisan profile page (`@tito-keramik.md`)
+```yaml
+---
+layout: ../layouts/profile.astro
+title: "@tito-keramik"      # handle/slug (also the filename without .md)
+name: "Tito Keramik"
+location: "Göttingen"
 ---
 ```
 
 ### Aggregation: use `import.meta.glob` (NOT `Astro.glob`)
 
-`Astro.glob()` was removed in Astro 6. Use Vite's `import.meta.glob({ eager: true })` instead.
+All aggregations use `../pages/@*.md` and filter by frontmatter fields to distinguish page types. Patterns must be static string literals.
 
-**Patterns must be static string literals** — Vite rejects dynamic template literals. Use a broader static pattern and filter at runtime.
+- **Markets** (for map/organizer): filter by `frontmatter?.badges`
+- **Organizers** (for listing): filter by `frontmatter?.slug`
+- **Artisans** (for market linking): filter by matching `artisans` list vs filename slug
 
 ```astro
-// karte.astro — aggregate all market pages for the map
-const modules = import.meta.glob("./markt/**/*.md", { eager: true })
+// karte.astro — aggregate market events for the map
+const modules = import.meta.glob("./@*.md", { eager: true })
 const events = Object.values(modules)
   .filter((p: any) => p.frontmatter?.badges)
-  .map((p: any) => ({ title: p.frontmatter.title, ... }))
-```
 
-```astro
 // markt-listing.astro — find all organizer pages
-const modules = import.meta.glob("../pages/markt/*/index.md", { eager: true })
+const modules = import.meta.glob("../pages/@*.md", { eager: true })
 const organizers = Object.entries(modules)
-  .filter(([_, mod]: any) => mod.frontmatter?.name)
-  .map(([path, mod]: any) => {
-    const slug = path.split("/").slice(-2, -1)[0] // extract slug from file path
-    return { slug, name: mod.frontmatter.name }
-  })
-```
+  .filter(([_, mod]: any) => mod.frontmatter?.slug)
+  .map(([path, mod]: any) => ({
+    slug: path.split("/").pop()?.replace(".md", ""),
+  }))
 
-```astro
-// markt-organizer.astro — find market pages under this organizer
-const slug = Astro.url.pathname.split("/").filter(Boolean).pop()
-const allModules = import.meta.glob("../pages/markt/*/*.md", { eager: true })
-const markets = Object.entries(allModules)
-  .filter(([path, mod]: any) => path.includes(`/${slug}/`) && mod.frontmatter?.badges)
-  .map(([_, mod]: any) => ({ title: mod.frontmatter.title, ... }))
-```
+// markt-organizer.astro — find markets for this organizer
+const { slug } = Astro.props.frontmatter
+const modules = import.meta.glob("../pages/@*.md", { eager: true })
+const markets = Object.entries(modules)
+  .filter(([_, mod]: any) =>
+    mod.frontmatter?.organizer === slug && mod.frontmatter?.badges
+  )
 
-The return type of `import.meta.glob({ eager: true })` is `{ [filePath: string]: { frontmatter, Content, ... } }`. Use `Object.entries()` when you need the path key; use `Object.values()` when you only need the module data.
+// markt-event.astro — find linked artisans
+const { artisans = [] } = Astro.props.frontmatter
+const modules = import.meta.glob("../pages/@*.md", { eager: true })
+const linkedArtisans = Object.entries(modules)
+  .filter(([path]) => artisans.includes(path.split("/").pop()?.replace(".md", "")))
+```
 
 ### Layout frontmatter access
 
-In layouts used by `.md` pages, frontmatter fields are nested under `Astro.props.frontmatter`:
+In layouts used by `.md` pages, access via `Astro.props.frontmatter`:
 ```astro
 const { title, place, badges = [] } = Astro.props.frontmatter
 ```
 
-**NOT** `Astro.props.title` — that only works for layouts used by `.astro` pages.
+`profile.astro` supports both `.md` (frontmatter) and `.astro` (content):
+```typescript
+const fm = Astro.props.frontmatter || Astro.props.content
+```
 
 ### Karte component contract
 
-`Karte.tsx` must receive events as a prop — never hardcode event data inside it:
-```astro
-<Karte client:only="react" events={events} />
-```
+`Karte.tsx` receives `EventData[]` events as a prop — never hardcode event data inside it. `Karte.tsx` calls `createEvents()` internally to hydrate into `Event`/`EventBadge` instances with `Temporal`.
 
-The `events` prop is `EventData[]` (from `@/lib/events`), containing plain objects with ISO date strings. `Karte.tsx` calls `createEvents()` internally to hydrate them into `Event`/`EventBadge` instances with `Temporal`.
+## Important Gotchas
 
-## Key Patterns
-
-### State Management
-
-- Use refs for mutable state that doesn't trigger re-renders (timeline, map)
-- Use `forceUpdate` pattern for imperative re-renders
-- Separate visual state from data state
-
-### shadcn/ui
-
-- Located in `src/components/ui/`
-- Use `cva` for variant management, export component and variants separately
-- Use `cn()` utility for class merging
-
-### Tailwind CSS v4
-
-- `@theme` syntax for custom colors, CSS variables in `:root`
-- OKLCH color format preferred
-
-## Important Notes
-
-- **No tests** — no test runner configured
-- **No ESLint** — relies on Prettier for formatting
-- **Astro 6** — `import.meta.glob`, not `Astro.glob`; `Astro.props.frontmatter` in md layouts
-- **trailingSlash: "never"** in astro config
-- **Date formatting** uses German locale (`de-DE`)
-- **OKLCH color format** preferred in Tailwind theme
-
----
-
-_Last updated: 2026-05-25_
+- **`url` is reserved** in Astro frontmatter (overrides to page URL). Use `website` instead.
+- **`@*.md` glob captures all three page types** — always filter by frontmatter fields (`badges`, `slug`, `organizer`).
+- **Organizer pages need `slug`** field for `markt-organizer.astro` to match markets via `organizer` field.
+- **Artisans list on market pages** uses full filename (e.g., `"@tito-keramik"`), matched against `@*.md` without `.md`.
+- **No tests**, no ESLint, `trailingSlash: "never"`, German locale (`de-DE`), OKLCH colors.
+- **Astro 6**: `import.meta.glob`, not `Astro.glob`; `Astro.props.frontmatter` in md layouts.
