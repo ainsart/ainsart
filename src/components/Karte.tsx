@@ -384,7 +384,7 @@ const EVENTS: Event[] = [
         "Keramikmarkt Paderborn",
       ),
     ],
-    [8.7104291, 51.7459595],
+    [8.7105392, 51.7453595],
     "Schlosspark und Lippesee Gesellschaft",
   ),
 ];
@@ -812,28 +812,3 @@ export default function Karte() {
     </main>
   );
 }
-// <Badge
-//   variant={
-//     badge.isPast(layout.nowMilliseconds)
-//       ? "past"
-//       : badge.isFuture(layout.nowMilliseconds)
-//         ? "future"
-//         : "present"
-//   }
-//   className="flex w-full"
-// >
-// </Badge>
-// <div className="w-full h-full flex items-center justify-center">
-//   <Badge
-//     variant={
-//       badge.isPast(layout.nowMilliseconds)
-//         ? "past"
-//         : badge.isFuture(layout.nowMilliseconds)
-//           ? "future"
-//           : "present"
-//     }
-//     className="flex w-full"
-//   >
-//     {badge.label(layout.ppd)}
-//   </Badge>
-// </div>
