@@ -1,0 +1,136 @@
+---
+const { content } = Astro.props;
+import "../styles/global.css";
+import Main from "./main.astro";
+import Ainsart from "../components/Ainsart";
+import Footer from "../components/Footer.astro";
+import { Temporal } from "@js-temporal/polyfill";
+import { Badge } from "../components/ui/badge";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "../components/ui/card";
+
+interface ProfileFrontmatter {
+  title: string;
+  name: string;
+  role?: string;
+  avatar?: string;
+  location?: string;
+}
+
+const fm = Astro.props.frontmatter || Astro.props.content;
+const handle = fm.title || Astro.url.pathname.split("/").pop() || "";
+const { name, role, avatar, location, markets: marketSlugs = [] } = fm;
+
+const modules = import.meta.glob("../pages/@*.md", { eager: true });
+const markets = Object.entries(modules)
+  .filter(([path]) => {
+    const slug = path.split("/").pop()?.replace(".md", "");
+    return (marketSlugs as string[]).includes(slug);
+  })
+  .map(([path, mod]: [string, any]) => {
+    const badges = (mod.frontmatter?.badges as any[] ?? []).map((badge: any) => {
+      const start = Temporal.ZonedDateTime.from(badge.start);
+      const end = Temporal.ZonedDateTime.from(badge.end);
+      const date = start.toLocaleString("de-DE", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+      const time = `${start.toLocaleString("de-DE", { hour: "2-digit", minute: "2-digit" })} – ${end.toLocaleString("de-DE", { hour: "2-digit", minute: "2-digit" })} Uhr`;
+      return { ...badge, date, time };
+    });
+    return {
+      slug: path.split("/").pop()?.replace(".md", ""),
+      title: mod.frontmatter?.title,
+      place: mod.frontmatter?.place,
+      badges,
+    };
+  });
+---
+
+<Main content={{ title: content.title }}>
+  <body class:list={["bg-background flex h-screen flex-col", "overflow-auto"]}>
+    <main class="container mx-auto max-w-2xl px-4 py-8 mt-12">
+      <Ainsart content={{ center: true }} />
+      <header class="mb-12 text-center">
+        {
+          fm.avatar && (
+            <div class="mb-6 inline-flex h-32 w-32 items-center justify-center overflow-hidden rounded-full bg-stone-300">
+              <img
+                src={fm.avatar}
+                alt={fm.name}
+                class="h-full w-full object-cover"
+              />
+            </div>
+          )
+        }
+
+        <h1
+          class="mb-2 text-3xl font-bold"
+          style="font-family: 'Libre Baskerville', serif;"
+        >
+          {fm.name}
+        </h1>
+
+        {
+          fm.website && (
+            <a
+              href={fm.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-blue-600 hover:underline"
+            >
+              Zur Website
+            </a>
+          )
+        }
+      </header>
+
+      <article class="prose prose-stone prose-lg mx-auto">
+        <slot />
+      </article>
+
+      {
+        markets.length > 0 && (
+          <div class="mt-12">
+            <h2
+              class="mb-4 text-xl font-semibold"
+              style="font-family: 'Libre Baskerville', serif;"
+            >
+              Märkte
+            </h2>
+            <div class="grid gap-2">
+              {markets.map((market) => (
+                <a
+                  href={`/${market.slug}`}
+                  class="group block no-underline"
+                >
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>{market.title}</CardTitle>
+                      <CardDescription>
+                        {market.place}
+                      </CardDescription>
+                      <div class="mt-1 flex flex-wrap gap-1">
+                        {market.badges.map((badge: any) => (
+                          <Badge variant="event">
+                            {badge.date}, {badge.time}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardHeader>
+                  </Card>
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </main>
+  </body>
+  <Footer content={{ social: true }} />
+</Main>
