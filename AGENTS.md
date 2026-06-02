@@ -52,7 +52,7 @@ src/
 ├── layouts/
 │   ├── main.astro       # Base HTML layout
 │   ├── page.astro       # Content page wrapper (max-w-2xl prose)
-│   ├── profile.astro    # Artisan profile layout (title=handle, name=display)
+│   ├── artisan.astro    # Artisan profile layout (title=handle, name=display)
 │   └── markt-*.astro    # Organizer listing, organizer profile, event edition
 ├── lib/
 │   ├── utils.ts         # cn() utility
@@ -87,7 +87,7 @@ website: "https://www.schlosspark-paderborn.de"
 ### Market edition page (`@keramikmarkt-paderborn-2026.md`)
 ```yaml
 ---
-layout: ../layouts/markt-event.astro
+layout: ../layouts/markt.astro
 title: "Keramikmarkt Paderborn"
 place: "Neuhäuser Schlosspark"
 website: "https://www.paderborn.de/..."   # NOT "url" — reserved by Astro
@@ -106,7 +106,7 @@ artisans:
 ### Artisan profile page (`@tito-keramik.md`)
 ```yaml
 ---
-layout: ../layouts/profile.astro
+layout: ../layouts/artisan.astro
 title: "@tito-keramik"      # handle/slug (also the filename without .md)
 name: "Tito Keramik"
 location: "Göttingen"
@@ -157,7 +157,7 @@ In layouts used by `.md` pages, access via `Astro.props.frontmatter`:
 const { title, place, badges = [] } = Astro.props.frontmatter
 ```
 
-`profile.astro` supports both `.md` (frontmatter) and `.astro` (content):
+`artisan.astro` supports both `.md` (frontmatter) and `.astro` (content):
 ```typescript
 const fm = Astro.props.frontmatter || Astro.props.content
 ```
