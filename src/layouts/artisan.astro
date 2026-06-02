@@ -49,7 +49,8 @@ const markets = Object.entries(modules)
       place: mod.frontmatter?.place,
       badges,
     };
-  });
+  })
+  .sort((a, b) => (a.badges[0]?.start ?? "").localeCompare(b.badges[0]?.start ?? ""));
 ---
 
 <Main content={{ title: content.title }}>
