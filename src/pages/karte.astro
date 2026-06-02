@@ -1,13 +1,47 @@
 ---
-import "../styles/global.css";
-import Main from "../layouts/main.astro";
-const { content } = Astro.props;
-import Footer from "../components/Footer.astro";
-import Karte from "../components/Karte";
+import "../styles/global.css"
+import Main from "../layouts/main.astro"
+import Karte from "../components/Karte"
+
+const marketModules = import.meta.glob("./@*.md", { eager: true })
+const pages = Object.values(marketModules)
+const events = pages
+  .filter((p: any) => p.frontmatter?.badges)
+  .map((p: any) => {
+    const pagePath = Object.keys(marketModules).find(
+      (k) => (marketModules[k] as any) === p,
+    )
+    const handle = pagePath?.split("/").pop()?.replace(".md", "") || ""
+    return {
+      title: p.frontmatter.title,
+      place: p.frontmatter.place,
+      url: p.frontmatter.website,
+      badges: p.frontmatter.badges,
+      lnglat: p.frontmatter.lnglat,
+      organizer: p.frontmatter.organizer,
+      year: p.frontmatter.year,
+      handle,
+    }
+  })
+const artisans = pages
+  .filter((p: any) => p.frontmatter?.lnglat && !p.frontmatter?.badges)
+  .map((p: any, _idx: number, arr: any[]) => {
+    const pagePath = Object.keys(marketModules).find(
+      (k) => (marketModules[k] as any) === p,
+    )
+    const handle = pagePath?.split("/").pop()?.replace(".md", "") || ""
+    return {
+      handle,
+      name: p.frontmatter.name,
+      location: p.frontmatter.location,
+      address: p.frontmatter.address,
+      lnglat: p.frontmatter.lnglat,
+    }
+  })
 ---
 
 <Main content={{ title: "ains.art" }}>
   <body class="bg-background fixed inset-0 flex h-dvh w-full overflow-hidden">
-    <Karte client:only="react" />
+    <Karte client:only="react" events={events} artisans={artisans} />
   </body>
 </Main>
