@@ -1,0 +1,112 @@
+---
+import Page from "./page.astro";
+import { Temporal } from "@js-temporal/polyfill";
+import { Badge } from "../components/ui/badge";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "../components/ui/card";
+
+const {
+  title,
+  place,
+  website,
+  badges = [],
+  artisans = [],
+} = Astro.props.frontmatter;
+
+const formattedBadges = (
+  badges as { title: string; start: string; end: string }[]
+).map((badge) => {
+  const start = Temporal.ZonedDateTime.from(badge.start);
+  const end = Temporal.ZonedDateTime.from(badge.end);
+  const date = start.toLocaleString("de-DE", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  const time = `${start.toLocaleString("de-DE", { hour: "2-digit", minute: "2-digit" })} – ${end.toLocaleString("de-DE", { hour: "2-digit", minute: "2-digit" })} Uhr`;
+  return { ...badge, date, time };
+});
+
+const artisanModules = import.meta.glob("../pages/@*.md", {
+  eager: true,
+});
+const linkedArtisans = Object.entries(artisanModules)
+  .filter(([path]) => {
+    const slug = path.split("/").pop()?.replace(".md", "");
+    return (artisans as string[]).includes(slug);
+  })
+  .map(([path, mod]: [string, any]) => ({
+    slug: path.split("/").pop()?.replace(".md", ""),
+    name: mod.frontmatter?.name,
+    description: mod.frontmatter?.description,
+  }));
+---
+
+<Page content={{ title }}>
+  <h1
+    class="mb-2 text-3xl font-bold"
+    style="font-family: 'Libre Baskerville', serif;"
+  >
+    {title}
+  </h1>
+
+  <div class="mb-8 flex flex-wrap gap-2">
+    {
+      formattedBadges.map((badge) => (
+        <Badge variant="event">
+          {badge.date}, {badge.time}
+        </Badge>
+      ))
+    }
+  </div>
+  <p class="mb-6 text-stone-500">{place}</p>
+  {
+    website && (
+      <p>
+        <a
+          href={website}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-blue-600 hover:underline"
+        >
+          Offizielle Webseite
+        </a>
+      </p>
+    )
+  }
+
+  <div class="prose prose-stone mb-8">
+    <slot />
+  </div>
+
+  {
+    linkedArtisans.length > 0 && (
+      <div class="mb-8">
+        <h2
+          class="mb-3 text-xl font-semibold"
+          style="font-family: 'Libre Baskerville', serif;"
+        >
+          Ausstellende
+        </h2>
+        <div class="grid gap-2">
+          {linkedArtisans.map(
+            (artisan: { slug: string; name: string; description: string }) => (
+              <a href={`/${artisan.slug}`} class="group block no-underline">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{artisan.name}</CardTitle>
+                    <CardDescription>{artisan.description}</CardDescription>
+                  </CardHeader>
+                </Card>
+              </a>
+            ),
+          )}
+        </div>
+      </div>
+    )
+  }
+</Page>
