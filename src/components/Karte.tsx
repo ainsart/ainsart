@@ -149,7 +149,7 @@ class SeasonBadge extends TimeBadge {
   get next() {
     return new SeasonBadge(this.zdt.add({ years: 1 }));
   }
-  label(ppd: number) {
+  label(_ppd: number) {
     return String(this.zdt.year);
   }
 }
@@ -337,6 +337,25 @@ class EventBadge extends TimeBadge {
   }
 }
 
+interface EventData {
+  title: string;
+  place: string;
+  url: string;
+  badges: { start: string; end: string; title?: string }[];
+  lnglat: [number, number];
+  organizer: string;
+  year: number;
+  handle: string;
+}
+
+interface ArtisanData {
+  handle: string
+  name: string
+  location: string
+  address: string
+  lnglat: [number, number]
+}
+
 class Event {
   constructor(
     readonly title: string,
@@ -345,6 +364,7 @@ class Event {
     readonly badges: EventBadge[],
     readonly lnglat: [number, number],
     readonly organizer: string,
+    readonly handle: string,
   ) {}
   get id(): string {
     return slug(this.title);
@@ -367,27 +387,27 @@ class Event {
   }
 }
 
-const EVENTS: Event[] = [
-  new Event(
-    "Keramikmarkt Paderborn",
-    "Neuhäuser Schlosspark",
-    "https://www.paderborn.de/tourismus-kultur/veranstaltungen/Keramikmarkt.php",
-    [
-      new EventBadge(
-        Temporal.ZonedDateTime.from("2026-04-25T11:00+02:00[Europe/Berlin]"),
-        Temporal.ZonedDateTime.from("2026-04-25T18:00+02:00[Europe/Berlin]"),
-        "Keramikmarkt Paderborn",
+function createEvents(data: EventData[]): Event[] {
+  return data.map(
+    (d) =>
+      new Event(
+        d.title,
+        d.place,
+        d.url,
+        d.badges.map(
+          (b) =>
+            new EventBadge(
+              Temporal.ZonedDateTime.from(b.start),
+              Temporal.ZonedDateTime.from(b.end),
+              b.title || d.title,
+            ),
+        ),
+        d.lnglat,
+        d.organizer,
+        d.handle,
       ),
-      new EventBadge(
-        Temporal.ZonedDateTime.from("2026-04-26T11:00+02:00[Europe/Berlin]"),
-        Temporal.ZonedDateTime.from("2026-04-26T18:00+02:00[Europe/Berlin]"),
-        "Keramikmarkt Paderborn",
-      ),
-    ],
-    [8.7105392, 51.7453595],
-    "Schlosspark und Lippesee Gesellschaft",
-  ),
-];
+  );
+}
 
 interface Layout {
   top: TimeBadge[];
@@ -413,7 +433,12 @@ function generateBadges(
   return badges;
 }
 
-export default function Karte() {
+interface KarteProps {
+  events: EventData[];
+  artisans?: ArtisanData[];
+}
+
+export default function Karte({ events, artisans = [] }: KarteProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const timeline = useRef({
@@ -631,6 +656,9 @@ export default function Karte() {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<maplibregl.Map | null>(null);
 
+  const EVENTS = useMemo(() => createEvents(events), [events]);
+  const lngLats = useMemo(() => EVENTS.map((e) => e.lnglat), [EVENTS]);
+
   useEffect(() => {
     if (!mapRef.current || mapInstance.current) return;
     mapInstance.current = new maplibregl.Map({
@@ -639,7 +667,6 @@ export default function Karte() {
       center: map.current.center as [number, number],
       zoom: map.current.zoom,
     });
-    const lngLats = EVENTS.map((e) => e.lnglat);
     const bounds = new maplibregl.LngLatBounds(
       lngLats[0] as maplibregl.LngLatLike,
       lngLats[0] as maplibregl.LngLatLike,
@@ -652,7 +679,7 @@ export default function Karte() {
       mapInstance.current?.remove();
       mapInstance.current = null;
     };
-  }, [map.current.center, map.current.zoom]);
+  }, [map.current.center, map.current.zoom, lngLats]);
 
   const eventMarkersRef = useRef<maplibregl.Marker[]>([]);
   const [bounds, setBounds] = useState<maplibregl.LngLatBounds | null>(null);
@@ -684,7 +711,7 @@ export default function Karte() {
           layout.endMilliseconds,
         ),
       ),
-    [bounds, layout.startMilliseconds, layout.endMilliseconds],
+    [EVENTS, bounds, layout.startMilliseconds, layout.endMilliseconds],
   );
 
   useEffect(() => {
@@ -696,6 +723,10 @@ export default function Karte() {
     visibleEvents.forEach((event) => {
       const el = document.createElement("div");
       el.className = "event-marker";
+      el.style.cursor = "pointer";
+      el.addEventListener("click", () => {
+        window.location.href = `/${event.handle}`;
+      });
       const marker = new maplibregl.Marker({ element: el })
         .setLngLat(event.lnglat as [number, number])
         .setPopup(new maplibregl.Popup().setText(event.title))
@@ -703,6 +734,33 @@ export default function Karte() {
       eventMarkersRef.current.push(marker);
     });
   }, [visibleEvents]);
+
+  const artisanMarkersRef = useRef<maplibregl.Marker[]>([]);
+
+  useEffect(() => {
+    if (!mapInstance.current) return;
+
+    artisanMarkersRef.current.forEach((marker) => marker.remove());
+    artisanMarkersRef.current = [];
+
+    if (!bounds) return;
+    artisans.forEach((artisan) => {
+      if (!bounds.contains(artisan.lnglat as maplibregl.LngLatLike)) return;
+      const el = document.createElement("div");
+      el.className = "artisan-marker";
+      el.style.cursor = "pointer";
+      el.addEventListener("click", () => {
+        window.location.href = `/${artisan.handle}`;
+      });
+      const marker = new maplibregl.Marker({ element: el })
+        .setLngLat(artisan.lnglat as [number, number])
+        .setPopup(
+          new maplibregl.Popup().setText(`${artisan.name}\n${artisan.address}`),
+        )
+        .addTo(mapInstance.current!);
+      artisanMarkersRef.current.push(marker);
+    });
+  }, [artisans, bounds]);
 
   const visibleEventBadges = visibleEvents.flatMap((e) => e.badges);
 
@@ -738,7 +796,7 @@ export default function Karte() {
             className="stroke-gray-300"
             strokeWidth={1}
           />
-          {visibleEventBadges.map((badge) => (
+          {visibleEventBadges.map((badge: EventBadge) => (
             <foreignObject
               key={badge.id}
               x={badge.x(layout.startMilliseconds, layout.ppd)}
