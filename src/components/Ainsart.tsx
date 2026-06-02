@@ -8,8 +8,7 @@ export default function Ainsart({ center = true }) {
     >
       <a
         href="/"
-        style={{ fontFamily: "'Libre Baskerville', serif" }}
-        className="cursor-pointer text-xl text-green-700 p-1 inline-flex items-center bg-transparent rounded-md"
+        className="cursor-pointer text-xl text-green-700 p-1 inline-flex items-center bg-transparent rounded-md font-['Libre_Baskerville',_serif]"
       >
         <b>ains</b>.art
       </a>
