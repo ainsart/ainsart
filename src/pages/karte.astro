@@ -11,7 +11,7 @@ const events = pages
     const pagePath = Object.keys(marketModules).find(
       (k) => (marketModules[k] as any) === p,
     )
-    const handle = pagePath?.split("/pages/m/")[1]?.replace(".md", "") || ""
+    const handle = pagePath?.split("/").pop()?.replace(".md", "") || ""
     return {
       title: p.frontmatter.title,
       place: p.frontmatter.place,
