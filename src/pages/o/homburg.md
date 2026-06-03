@@ -1,6 +1,5 @@
 ---
-layout: ../../layouts/markt-organizer.astro
-slug: "homburg"
+layout: ../../layouts/organizer.astro
 name: "Kreis- und Universitätsstadt Homburg"
 location: "Homburg"
 website: "https://www.homburg.de/leben-in-homburg/veranstaltungsvielfalt/keramikmarkt/"
