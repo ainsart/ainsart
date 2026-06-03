@@ -58,12 +58,18 @@ src/
 │   ├── utils.ts         # cn() utility
 │   └── events.ts        # Event, EventBadge classes + createEvents() + EventData type
 ├── pages/
-│   ├── index.astro      # Homepage (links to /markt/ and /kunsthandwerkende)
+│   ├── index.astro      # Homepage (links to /karte)
 │   ├── karte.astro      # Map page — aggregates events, passes to <Karte>
-│   ├── markt/index.md   # /markt/ — listing page (finds all organizer pages)
-│   ├── @schlosspark-paderborn.md               # Organizer profile
-│   ├── @keramikmarkt-paderborn-2026.md          # Market edition (event)
-│   ├── @tito-keramik.md                         # Artisan profile
+│   ├── a/               # Artisan profiles → /a/<handle>
+│   │   └── tito-keramik.md
+│   ├── o/               # Organizers → /o/<handle>
+│   │   ├── schlosspark-paderborn.md
+│   │   ├── homburg.md
+│   │   └── ...
+│   ├── m/               # Market editions → /m/<handle>
+│   │   ├── keramikmarkt-paderborn-2026.md
+│   │   ├── keramikmarkt-homburg-2026.md
+│   │   └── ...
 │   └── *.md             # Static pages (impressum, datenschutz, etc.)
 └── styles/
     └── global.css       # Tailwind v4 config + theme
@@ -71,12 +77,12 @@ src/
 
 ## Data Layer — READ THIS FIRST
 
-**No shared data file, no content collections, no database.** All structured data lives in the frontmatter of `@*.md` pages directly under `src/pages/`. Page type is determined by its layout, not its directory.
+**No shared data file, no content collections, no database.** All structured data lives in the frontmatter of `*.md` pages under `src/pages/`. Pages are organized by type into subdirectories (`a/`, `o/`, `m/`), not by `@` filename prefix. Page type is determined by its layout, not its directory.
 
-### Organizer page (`@schlosspark-paderborn.md`)
+### Organizer page (`o/schlosspark-paderborn.md`)
 ```yaml
 ---
-layout: ../layouts/markt-organizer.astro
+layout: ../../layouts/markt-organizer.astro
 slug: "paderborn"          # links to markets via organizer field
 name: "Schlosspark und Lippesee Gesellschaft"
 location: "Paderborn"
@@ -84,10 +90,10 @@ website: "https://www.schlosspark-paderborn.de"
 ---
 ```
 
-### Market edition page (`@keramikmarkt-paderborn-2026.md`)
+### Market edition page (`m/keramikmarkt-paderborn-2026.md`)
 ```yaml
 ---
-layout: ../layouts/markt.astro
+layout: ../../layouts/markt.astro
 title: "Keramikmarkt Paderborn"
 place: "Neuhäuser Schlosspark"
 website: "https://www.paderborn.de/..."   # NOT "url" — reserved by Astro
@@ -99,15 +105,15 @@ lnglat: [8.7105392, 51.7453595]
 organizer: "paderborn"     # matches organizer's slug
 year: 2026
 artisans:
-  - "@tito-keramik"        # matches artisan filename (without .md)
+  - "tito-keramik"        # matches artisan filename (without .md)
 ---
 ```
 
-### Artisan profile page (`@tito-keramik.md`)
+### Artisan profile page (`a/tito-keramik.md`)
 ```yaml
 ---
-layout: ../layouts/artisan.astro
-title: "@tito-keramik"      # handle/slug (also the filename without .md)
+layout: ../../layouts/artisan.astro
+title: "tito-keramik"      # handle/slug (also the filename without .md)
 name: "Tito Keramik"
 location: "Göttingen"
 ---
@@ -115,37 +121,29 @@ location: "Göttingen"
 
 ### Aggregation: use `import.meta.glob` (NOT `Astro.glob`)
 
-All aggregations use `../pages/@*.md` and filter by frontmatter fields to distinguish page types. Patterns must be static string literals.
+All aggregations use `../pages/<dir>/*.md` and filter by frontmatter fields to distinguish page types. Patterns must be static string literals.
 
-- **Markets** (for map/organizer): filter by `frontmatter?.badges`
-- **Organizers** (for listing): filter by `frontmatter?.slug`
-- **Artisans** (for market linking): filter by matching `artisans` list vs filename slug
+- **Markets** (for map/organizer): glob `../pages/m/*.md`, filter by `frontmatter?.badges`
+- **Organizers** (for listing): glob `../pages/o/*.md`, filter by `frontmatter?.slug`
+- **Artisans** (for market linking): glob `../pages/a/*.md`, filter by matching `artisans` list vs filename slug
 
 ```astro
 // karte.astro — aggregate market events for the map
-const modules = import.meta.glob("./@*.md", { eager: true })
+const modules = import.meta.glob("./m/*.md", { eager: true })
 const events = Object.values(modules)
   .filter((p: any) => p.frontmatter?.badges)
 
-// markt-listing.astro — find all organizer pages
-const modules = import.meta.glob("../pages/@*.md", { eager: true })
-const organizers = Object.entries(modules)
-  .filter(([_, mod]: any) => mod.frontmatter?.slug)
-  .map(([path, mod]: any) => ({
-    slug: path.split("/").pop()?.replace(".md", ""),
-  }))
-
 // markt-organizer.astro — find markets for this organizer
 const { slug } = Astro.props.frontmatter
-const modules = import.meta.glob("../pages/@*.md", { eager: true })
+const modules = import.meta.glob("../pages/m/*.md", { eager: true })
 const markets = Object.entries(modules)
   .filter(([_, mod]: any) =>
     mod.frontmatter?.organizer === slug && mod.frontmatter?.badges
   )
 
-// markt-event.astro — find linked artisans
+// markt.astro — find linked artisans
 const { artisans = [] } = Astro.props.frontmatter
-const modules = import.meta.glob("../pages/@*.md", { eager: true })
+const modules = import.meta.glob("../pages/a/*.md", { eager: true })
 const linkedArtisans = Object.entries(modules)
   .filter(([path]) => artisans.includes(path.split("/").pop()?.replace(".md", "")))
 ```
@@ -171,6 +169,7 @@ const fm = Astro.props.frontmatter || Astro.props.content
 - **`url` is reserved** in Astro frontmatter (overrides to page URL). Use `website` instead.
 - **`@*.md` glob captures all three page types** — always filter by frontmatter fields (`badges`, `slug`, `organizer`).
 - **Organizer pages need `slug`** field for `markt-organizer.astro` to match markets via `organizer` field.
-- **Artisans list on market pages** uses full filename (e.g., `"@tito-keramik"`), matched against `@*.md` without `.md`.
+- **Artisans list on market pages** uses full filename (e.g., `"tito-keramik"`), matched against `m/*.md` without `.md`.
 - **No tests**, no ESLint, `trailingSlash: "never"`, German locale (`de-DE`), OKLCH colors.
 - **Astro 6**: `import.meta.glob`, not `Astro.glob`; `Astro.props.frontmatter` in md layouts.
+- **Route generation**: subdirectories determine URL paths. `a/tito-keramik.md` → `/a/tito-keramik`, `m/event.md` → `/m/event`. Handle/slug extraction uses `path.split("/pages/")[1]?.replace(".md", "")` to include the subdirectory prefix.
