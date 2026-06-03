@@ -3,7 +3,7 @@ import "../styles/global.css"
 import Main from "../layouts/main.astro"
 import Karte from "../components/Karte"
 
-const marketModules = import.meta.glob("./@*.md", { eager: true })
+const marketModules = import.meta.glob("./m/*.md", { eager: true })
 const pages = Object.values(marketModules)
 const events = pages
   .filter((p: any) => p.frontmatter?.badges)
@@ -11,7 +11,7 @@ const events = pages
     const pagePath = Object.keys(marketModules).find(
       (k) => (marketModules[k] as any) === p,
     )
-    const handle = pagePath?.split("/").pop()?.replace(".md", "") || ""
+    const handle = pagePath?.split("/pages/")[1]?.replace(".md", "") || ""
     return {
       title: p.frontmatter.title,
       place: p.frontmatter.place,
@@ -23,13 +23,14 @@ const events = pages
       handle,
     }
   })
-const artisans = pages
-  .filter((p: any) => p.frontmatter?.lnglat && !p.frontmatter?.badges)
+
+const artisanModules = import.meta.glob("./a/*.md", { eager: true })
+const artisans = Object.values(artisanModules)
   .map((p: any, _idx: number, arr: any[]) => {
-    const pagePath = Object.keys(marketModules).find(
-      (k) => (marketModules[k] as any) === p,
+    const pagePath = Object.keys(artisanModules).find(
+      (k) => (artisanModules[k] as any) === p,
     )
-    const handle = pagePath?.split("/").pop()?.replace(".md", "") || ""
+    const handle = pagePath?.split("/pages/")[1]?.replace(".md", "") || ""
     return {
       handle,
       name: p.frontmatter.name,
