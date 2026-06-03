@@ -7,9 +7,9 @@ lnglat: [9.8849905, 51.5653225]
 description: "Frostharte Gartenkeramik und alltagstaugliche Geschirre aus Göttingen."
 website: "https://www.tito-keramik.de"
 markets:
-  - "keramikmarkt-homburg-2026"
-  - "kraeutermarkt-herbigshagen-2026"
-  - "keramikmarkt-paderborn-2026"
+  - "2026-keramikmarkt-homburg"
+  - "2026-kraeutermarkt-herbigshagen"
+  - "2026-keramikmarkt-paderborn"
 ---
 
 Seit Juli 2023 fertigt Tito Keramik in der Produktionsstätte in Göttingen
