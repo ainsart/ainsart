@@ -107,7 +107,11 @@ year: 2026
 artisans:
   - "tito-keramik"        # matches artisan filename (without .md)
 ---
+
+Auf dem Keramikmarkt im Schlosspark Neuhaus präsentieren Kunsthandwerker handgefertigtes Geschirr, Vasen und Kunstobjekte inmitten barocker Gartenkulisse.
 ```
+
+**Market body content** — keep descriptions short (1–2 sentences), factual, no hyperlinks. The layout renders body text via `<slot />` in `prose`. The `website` field already provides the link.
 
 ### Artisan profile page (`a/tito-keramik.md`)
 ```yaml
@@ -173,3 +177,4 @@ const fm = Astro.props.frontmatter || Astro.props.content
 - **No tests**, no ESLint, `trailingSlash: "never"`, German locale (`de-DE`), OKLCH colors.
 - **Astro 6**: `import.meta.glob`, not `Astro.glob`; `Astro.props.frontmatter` in md layouts.
 - **Route generation**: subdirectories determine URL paths. `a/tito-keramik.md` → `/a/tito-keramik`, `m/event.md` → `/m/event`. Handle/slug extraction uses `path.split("/pages/")[1]?.replace(".md", "")` to include the subdirectory prefix.
+- **Geocoding**: use [Nominatim](https://operations.osmfoundation.org/policies/nominatim/) to resolve `lnglat` from addresses. The API is free under OSMF's usage policy (max 1 req/s, attribution required). Query format: `https://nominatim.openstreetmap.org/search?q=<url-encoded-address>&format=json&limit=1`.
