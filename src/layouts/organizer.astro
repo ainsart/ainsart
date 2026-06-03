@@ -1,0 +1,68 @@
+---
+import Page from "./page.astro"
+
+const { name, location, website, slug } = Astro.props.frontmatter
+
+const allMarketModules = import.meta.glob("../pages/m/*.md", {
+  eager: true,
+})
+const markets = Object.entries(allMarketModules)
+  .filter(
+    ([path, mod]: [string, any]) =>
+      mod.frontmatter?.organizer === slug && mod.frontmatter?.badges,
+  )
+  .map(([path, mod]: [string, any]) => ({
+    title: mod.frontmatter.title,
+    place: mod.frontmatter.place,
+    year: mod.frontmatter.year,
+    route: path.split("/pages/")[1]?.replace(".md", ""),
+  }))
+---
+
+<Page content={{ title: name }}>
+  <h1
+    class="mb-8 text-3xl font-bold"
+    style="font-family: 'Libre Baskerville', serif;"
+  >
+    {name}
+  </h1>
+
+  {location && <p class="mb-4 text-stone-600">📍 {location}</p>}
+
+  {website && (
+    <p class="mb-8">
+      <a
+        href={website}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-blue-600 hover:underline"
+      >
+        Webseite
+      </a>
+    </p>
+  )}
+
+  <div class="prose prose-stone mb-8">
+    <slot />
+  </div>
+
+  <h2 class="mb-4 text-xl font-bold">Märkte</h2>
+
+  <div class="grid gap-4">
+    {
+      markets.map((market) => (
+        <a
+          href={`/${market.route}`}
+          class="group block no-underline"
+        >
+          <div class="rounded-lg border bg-card p-4 text-card-foreground shadow-sm transition-colors hover:bg-accent">
+            <h3 class="font-['Libre_Baskerville',_serif] text-lg font-semibold group-hover:underline">
+              {market.title}
+            </h3>
+            <p class="text-sm text-muted-foreground">{market.place}</p>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</Page>
