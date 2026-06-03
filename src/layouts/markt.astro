@@ -31,7 +31,7 @@ const formattedBadges = (
   return { ...badge, date, time };
 });
 
-const artisanModules = import.meta.glob("../pages/@*.md", {
+const artisanModules = import.meta.glob("../pages/a/*.md", {
   eager: true,
 });
 const linkedArtisans = Object.entries(artisanModules)
@@ -40,7 +40,7 @@ const linkedArtisans = Object.entries(artisanModules)
     return (artisans as string[]).includes(slug);
   })
   .map(([path, mod]: [string, any]) => ({
-    slug: path.split("/").pop()?.replace(".md", ""),
+    slug: path.split("/pages/")[1]?.replace(".md", ""),
     name: mod.frontmatter?.name,
     description: mod.frontmatter?.description,
   }));
