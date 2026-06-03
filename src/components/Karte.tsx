@@ -311,11 +311,15 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
       el.className = "event-marker";
       el.style.cursor = "pointer";
       el.addEventListener("click", () => {
-        window.location.href = `/${event.handle}`;
+        marker.togglePopup();
       });
       const marker = new maplibregl.Marker({ element: el })
         .setLngLat(event.lnglat as [number, number])
-        .setPopup(new maplibregl.Popup().setText(event.title))
+        .setPopup(
+          new maplibregl.Popup().setHTML(
+            `<div style="max-width:220px"><strong>${event.title}</strong><br/>${event.place}<br/><a href="/m/${event.handle}" style="color:#2563eb">Mehr erfahren →</a></div>`,
+          ),
+        )
         .addTo(mapInstance.current!);
       eventMarkersRef.current.push(marker);
     });
@@ -336,12 +340,14 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
       el.className = "artisan-marker";
       el.style.cursor = "pointer";
       el.addEventListener("click", () => {
-        window.location.href = `/${artisan.handle}`;
+        marker.togglePopup();
       });
       const marker = new maplibregl.Marker({ element: el })
         .setLngLat(artisan.lnglat as [number, number])
         .setPopup(
-          new maplibregl.Popup().setText(`${artisan.name}\n${artisan.address}`),
+          new maplibregl.Popup().setHTML(
+            `<div style="max-width:220px"><strong>${artisan.name}</strong><br/>${artisan.address}<br/><a href="/a/${artisan.handle}" style="color:#2563eb">Mehr erfahren →</a></div>`,
+          ),
         )
         .addTo(mapInstance.current!);
       artisanMarkersRef.current.push(marker);
