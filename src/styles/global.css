@@ -163,6 +163,12 @@
   h6 {
     font-family: "Libre Baskerville", serif;
   }
+  .maplibregl-popup-content {
+    @apply bg-transparent! shadow-none! p-0! rounded-none!;
+  }
+  .maplibregl-popup-tip {
+    @apply hidden!;
+  }
 }
 
 .event-marker {
@@ -172,7 +178,6 @@
   border: 3.5px solid var(--color-gray-100);
   border-radius: 50%;
   box-shadow: 0 0px 12px var(--color-gray-700);
-  transform: translate(-50%, -50%);
 }
 
 .artisan-marker {
@@ -182,5 +187,4 @@
   border: 3.5px solid var(--color-gray-100);
   border-radius: 50%;
   box-shadow: 0 0px 12px var(--color-gray-700);
-  transform: translate(-50%, -50%);
 }
