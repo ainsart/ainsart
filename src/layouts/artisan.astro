@@ -25,7 +25,7 @@ const fm = Astro.props.frontmatter || Astro.props.content;
 const handle = fm.title || Astro.url.pathname.split("/").pop() || "";
 const { name, role, avatar, location, markets: marketSlugs = [] } = fm;
 
-const modules = import.meta.glob("../pages/@*.md", { eager: true });
+const modules = import.meta.glob("../pages/m/*.md", { eager: true });
 const markets = Object.entries(modules)
   .filter(([path]) => {
     const slug = path.split("/").pop()?.replace(".md", "");
@@ -44,7 +44,7 @@ const markets = Object.entries(modules)
       return { ...badge, date, time };
     });
     return {
-      slug: path.split("/").pop()?.replace(".md", ""),
+      slug: path.split("/pages/")[1]?.replace(".md", ""),
       title: mod.frontmatter?.title,
       place: mod.frontmatter?.place,
       badges,
