@@ -1,6 +1,5 @@
 ---
-layout: ../../layouts/markt-organizer.astro
-slug: "birgit-rehse"
+layout: ../../layouts/organizer.astro
 name: "Birgit Rehse"
 website: "https://www.keramikmaerkte.de"
 ---
