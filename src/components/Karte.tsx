@@ -89,16 +89,7 @@ class YearBadge extends TimeBadge {
   }
   get start() {
     if (!this._start)
-      this._start = this.zdt.with({
-        month: 1,
-        day: 1,
-        hour: 0,
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-        microsecond: 0,
-        nanosecond: 0,
-      });
+      this._start = this.zdt.with({ month: 1, day: 1 }).with(TIME_ZERO);
     return this._start;
   }
   get end() {
@@ -129,16 +120,7 @@ class SeasonBadge extends TimeBadge {
     // 12-21 | Yule
     if (this._start) return this._start;
 
-    this._start = this.zdt.with({
-      month: 1,
-      day: 1,
-      hour: 0,
-      minute: 0,
-      second: 0,
-      millisecond: 0,
-      microsecond: 0,
-      nanosecond: 0,
-    });
+    this._start = this.zdt.with({ month: 1, day: 1 }).with(TIME_ZERO);
     return this._start;
   }
   get end() {
@@ -311,7 +293,7 @@ function getTopBottom(ppd: number): ZoomLevel {
   return { top: DaytimeBadge, bottom: HourBadge };
 }
 
-class EventBadge extends TimeBadge {
+class MarktBadge extends TimeBadge {
   constructor(
     readonly start: Temporal.ZonedDateTime,
     readonly end: Temporal.ZonedDateTime,
@@ -337,7 +319,7 @@ class EventBadge extends TimeBadge {
   }
 }
 
-interface EventData {
+interface MarktData {
   title: string;
   place: string;
   url: string;
@@ -349,19 +331,20 @@ interface EventData {
 }
 
 interface ArtisanData {
-  handle: string
-  name: string
-  location: string
-  address: string
-  lnglat: [number, number]
+  handle: string;
+  name: string;
+  location: string;
+  address: string;
+  lnglat: [number, number];
 }
 
-class Event {
+class Markt {
   constructor(
     readonly title: string,
     readonly place: string,
     readonly url: string,
-    readonly badges: EventBadge[],
+    readonly badges: MarktBadge[],
+    readonly badge: MarktBadge,
     readonly lnglat: [number, number],
     readonly organizer: string,
     readonly handle: string,
@@ -387,20 +370,25 @@ class Event {
   }
 }
 
-function createEvents(data: EventData[]): Event[] {
+function createEvents(data: MarktData[]): Markt[] {
   return data.map(
     (d) =>
-      new Event(
+      new Markt(
         d.title,
         d.place,
         d.url,
         d.badges.map(
           (b) =>
-            new EventBadge(
+            new MarktBadge(
               Temporal.ZonedDateTime.from(b.start),
               Temporal.ZonedDateTime.from(b.end),
-              b.title || d.title,
+              d.title,
             ),
+        ),
+        new MarktBadge(
+          Temporal.ZonedDateTime.from(d.badges.at(0)!.start),
+          Temporal.ZonedDateTime.from(d.badges.at(-1)!.end),
+          d.title,
         ),
         d.lnglat,
         d.organizer,
@@ -434,7 +422,7 @@ function generateBadges(
 }
 
 interface KarteProps {
-  events: EventData[];
+  events: MarktData[];
   artisans?: ArtisanData[];
 }
 
@@ -702,7 +690,7 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
     };
   }, []);
 
-  const visibleEvents = useMemo(
+  const visibleMarkets = useMemo(
     () =>
       EVENTS.filter((event) =>
         event.isVisible(
@@ -720,7 +708,7 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
     eventMarkersRef.current.forEach((marker) => marker.remove());
     eventMarkersRef.current = [];
 
-    visibleEvents.forEach((event) => {
+    visibleMarkets.forEach((event) => {
       const el = document.createElement("div");
       el.className = "event-marker";
       el.style.cursor = "pointer";
@@ -733,7 +721,7 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
         .addTo(mapInstance.current!);
       eventMarkersRef.current.push(marker);
     });
-  }, [visibleEvents]);
+  }, [visibleMarkets]);
 
   const artisanMarkersRef = useRef<maplibregl.Marker[]>([]);
 
@@ -762,7 +750,7 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
     });
   }, [artisans, bounds]);
 
-  const visibleEventBadges = visibleEvents.flatMap((e) => e.badges);
+  // const visibleEventBadges = visibleEvents.flatMap((e) => e.badges);
 
   const h = 30;
   return (
@@ -796,21 +784,45 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
             className="stroke-gray-300"
             strokeWidth={1}
           />
-          {visibleEventBadges.map((badge: EventBadge) => (
-            <foreignObject
-              key={badge.id}
-              x={badge.x(layout.startMilliseconds, layout.ppd)}
-              y={0}
-              width={badge.width(layout.ppd)}
-              height={h}
-            >
-              <div className={`w-full h-full flex items-center justify-center`}>
-                <Badge variant="event" className="flex w-full h-[22px]">
-                  {badge.label(layout.ppd)}
-                </Badge>
-              </div>
-            </foreignObject>
-          ))}
+          {visibleMarkets.map((m: Markt) => {
+            if (layout.ppd < 30) {
+              return (
+                <foreignObject
+                  key={m.badge.id}
+                  x={m.badge.x(layout.startMilliseconds, layout.ppd)}
+                  y={0}
+                  width={m.badge.width(layout.ppd)}
+                  height={h}
+                >
+                  <div
+                    className={`w-full h-full flex items-center justify-center`}
+                  >
+                    <Badge variant="event" className="flex w-full h-[22px]">
+                      {m.badge.label(layout.ppd)}
+                    </Badge>
+                  </div>
+                </foreignObject>
+              );
+            } else {
+              return m.badges.map((b: MarktBadge) => (
+                <foreignObject
+                  key={`badges-${b.id}`}
+                  x={b.x(layout.startMilliseconds, layout.ppd)}
+                  y={0}
+                  width={b.width(layout.ppd)}
+                  height={h}
+                >
+                  <div
+                    className={`w-full h-full flex items-center justify-center`}
+                  >
+                    <Badge variant="event" className="flex w-full h-[22px]">
+                      {b.label(layout.ppd)}
+                    </Badge>
+                  </div>
+                </foreignObject>
+              ));
+            }
+          })}
 
           {layout.bottom.map((badge) => (
             <>
