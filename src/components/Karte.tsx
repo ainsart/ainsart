@@ -324,11 +324,11 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
             lngLats={lngLats as [number, number][]}
           />
 
-          {visibleMarkets.map((event) => (
+          {visibleMarkets.map((market) => (
             <MapMarker
-              key={event.handle}
-              longitude={event.lnglat[0]}
-              latitude={event.lnglat[1]}
+              key={market.handle}
+              longitude={market.lnglat[0]}
+              latitude={market.lnglat[1]}
             >
               <MarkerContent>
                 <div className="event-marker" />
@@ -336,11 +336,13 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
               <MarkerPopup>
                 <div className="space-y-1">
                   <p className="text-popover-foreground text-sm font-medium">
-                    {event.title}
+                    {market.title}
                   </p>
-                  <p className="text-muted-foreground text-xs">{event.place}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {market.place}
+                  </p>
                   <a
-                    href={`/m/${event.handle}`}
+                    href={`/m/${market.handle}`}
                     className="text-blue-600 text-xs hover:underline"
                   >
                     Mehr erfahren &rarr;
