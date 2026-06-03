@@ -5,6 +5,13 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import Ainsart from "../components/Ainsart";
 import {
+  Map as MapComponent,
+  MapMarker,
+  MarkerContent,
+  MarkerPopup,
+  useMap,
+} from "@/components/ui/map";
+import {
   MS_PER_DAY,
   TimeBadge,
   createEvents,
@@ -24,6 +31,42 @@ interface KarteProps {
   artisans?: ArtisanData[];
 }
 
+function MapEventHandler({
+  onBoundsChange,
+  lngLats,
+}: {
+  onBoundsChange: (bounds: maplibregl.LngLatBounds) => void;
+  lngLats: [number, number][];
+}) {
+  const { map, isLoaded } = useMap();
+
+  useEffect(() => {
+    if (!map || !isLoaded || lngLats.length === 0) return;
+    const bounds = new maplibregl.LngLatBounds(
+      lngLats[0] as maplibregl.LngLatLike,
+      lngLats[0] as maplibregl.LngLatLike,
+    );
+    lngLats.slice(1).forEach((lngLat) => {
+      bounds.extend(lngLat as maplibregl.LngLatLike);
+    });
+    map.fitBounds(bounds, { padding: 50, maxZoom: 10 });
+  }, [map, isLoaded, lngLats]);
+
+  useEffect(() => {
+    if (!map) return;
+    const updateBounds = () => onBoundsChange(map.getBounds());
+    map.on("moveend", updateBounds);
+    map.on("zoomend", updateBounds);
+    updateBounds();
+    return () => {
+      map.off("moveend", updateBounds);
+      map.off("zoomend", updateBounds);
+    };
+  }, [map, onBoundsChange]);
+
+  return null;
+}
+
 export default function Karte({ events, artisans = [] }: KarteProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -31,11 +74,6 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
     x: typeof window !== "undefined" ? window.innerWidth * 0.25 : 300,
     zdt: Temporal.Now.zonedDateTimeISO(),
     ppd: 12,
-  });
-
-  const map = useRef({
-    center: LNG_LAT_GOE,
-    zoom: 10,
   });
 
   const [, forceUpdate] = useState(0);
@@ -239,54 +277,10 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
   };
 
   const layout = computeLayout();
-  const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstance = useRef<maplibregl.Map | null>(null);
+  const [bounds, setBounds] = useState<maplibregl.LngLatBounds | null>(null);
 
   const EVENTS = useMemo(() => createEvents(events), [events]);
   const lngLats = useMemo(() => EVENTS.map((e) => e.lnglat), [EVENTS]);
-
-  useEffect(() => {
-    if (!mapRef.current || mapInstance.current) return;
-    mapInstance.current = new maplibregl.Map({
-      container: mapRef.current,
-      style: "https://tiles.openfreemap.org/styles/liberty",
-      center: map.current.center as [number, number],
-      zoom: map.current.zoom,
-    });
-    const bounds = new maplibregl.LngLatBounds(
-      lngLats[0] as maplibregl.LngLatLike,
-      lngLats[0] as maplibregl.LngLatLike,
-    );
-    lngLats.slice(1).forEach((lngLat) => {
-      bounds.extend(lngLat as maplibregl.LngLatLike);
-    });
-    mapInstance.current.fitBounds(bounds, { padding: 50, maxZoom: 10 });
-    return () => {
-      mapInstance.current?.remove();
-      mapInstance.current = null;
-    };
-  }, [map.current.center, map.current.zoom, lngLats]);
-
-  const eventMarkersRef = useRef<maplibregl.Marker[]>([]);
-  const [bounds, setBounds] = useState<maplibregl.LngLatBounds | null>(null);
-
-  useEffect(() => {
-    if (!mapInstance.current) return;
-    const m = mapInstance.current;
-
-    const updateBounds = () => {
-      setBounds(m.getBounds());
-    };
-
-    updateBounds();
-
-    m.on("moveend", updateBounds);
-    m.on("zoomend", updateBounds);
-    return () => {
-      m.off("moveend", updateBounds);
-      m.off("zoomend", updateBounds);
-    };
-  }, []);
 
   const visibleMarkets = useMemo(
     () =>
@@ -300,70 +294,91 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
     [EVENTS, bounds, layout.startMilliseconds, layout.endMilliseconds],
   );
 
-  useEffect(() => {
-    if (!mapInstance.current) return;
-
-    eventMarkersRef.current.forEach((marker) => marker.remove());
-    eventMarkersRef.current = [];
-
-    visibleMarkets.forEach((event) => {
-      const el = document.createElement("div");
-      el.className = "event-marker";
-      el.style.cursor = "pointer";
-      el.addEventListener("click", () => {
-        marker.togglePopup();
-      });
-      const marker = new maplibregl.Marker({ element: el })
-        .setLngLat(event.lnglat as [number, number])
-        .setPopup(
-          new maplibregl.Popup().setHTML(
-            `<div style="max-width:220px"><strong>${event.title}</strong><br/>${event.place}<br/><a href="/m/${event.handle}" style="color:#2563eb">Mehr erfahren →</a></div>`,
-          ),
-        )
-        .addTo(mapInstance.current!);
-      eventMarkersRef.current.push(marker);
-    });
-  }, [visibleMarkets]);
-
-  const artisanMarkersRef = useRef<maplibregl.Marker[]>([]);
-
-  useEffect(() => {
-    if (!mapInstance.current) return;
-
-    artisanMarkersRef.current.forEach((marker) => marker.remove());
-    artisanMarkersRef.current = [];
-
-    if (!bounds) return;
-    artisans.forEach((artisan) => {
-      if (!bounds.contains(artisan.lnglat as maplibregl.LngLatLike)) return;
-      const el = document.createElement("div");
-      el.className = "artisan-marker";
-      el.style.cursor = "pointer";
-      el.addEventListener("click", () => {
-        marker.togglePopup();
-      });
-      const marker = new maplibregl.Marker({ element: el })
-        .setLngLat(artisan.lnglat as [number, number])
-        .setPopup(
-          new maplibregl.Popup().setHTML(
-            `<div style="max-width:220px"><strong>${artisan.name}</strong><br/>${artisan.address}<br/><a href="/a/${artisan.handle}" style="color:#2563eb">Mehr erfahren →</a></div>`,
-          ),
-        )
-        .addTo(mapInstance.current!);
-      artisanMarkersRef.current.push(marker);
-    });
-  }, [artisans, bounds]);
-
-  // const visibleEventBadges = visibleEvents.flatMap((e) => e.badges);
+  const visibleArtisans = useMemo(
+    () =>
+      bounds
+        ? artisans.filter((a) =>
+            bounds.contains(a.lnglat as maplibregl.LngLatLike),
+          )
+        : artisans,
+    [artisans, bounds],
+  );
 
   const h = 30;
   return (
     <main className="h-[100dvh] relative">
       <div
-        ref={mapRef}
         className="w-full select-none"
         style={{ height: `calc(100dvh - ${3 * h}px)` }}
-      />
+      >
+        <MapComponent
+          styles={{
+            light: "https://tiles.openfreemap.org/styles/liberty",
+            dark: "https://tiles.openfreemap.org/styles/liberty",
+          }}
+          center={LNG_LAT_GOE as [number, number]}
+          zoom={10}
+        >
+          <MapEventHandler
+            onBoundsChange={setBounds}
+            lngLats={lngLats as [number, number][]}
+          />
+
+          {visibleMarkets.map((event) => (
+            <MapMarker
+              key={event.handle}
+              longitude={event.lnglat[0]}
+              latitude={event.lnglat[1]}
+            >
+              <MarkerContent>
+                <div className="event-marker" />
+              </MarkerContent>
+              <MarkerPopup>
+                <div className="space-y-1">
+                  <p className="text-popover-foreground text-sm font-medium">
+                    {event.title}
+                  </p>
+                  <p className="text-muted-foreground text-xs">{event.place}</p>
+                  <a
+                    href={`/m/${event.handle}`}
+                    className="text-blue-600 text-xs hover:underline"
+                  >
+                    Mehr erfahren &rarr;
+                  </a>
+                </div>
+              </MarkerPopup>
+            </MapMarker>
+          ))}
+
+          {visibleArtisans.map((artisan) => (
+            <MapMarker
+              key={artisan.handle}
+              longitude={artisan.lnglat[0]}
+              latitude={artisan.lnglat[1]}
+            >
+              <MarkerContent>
+                <div className="artisan-marker" />
+              </MarkerContent>
+              <MarkerPopup>
+                <div className="space-y-1">
+                  <p className="text-popover-foreground text-sm font-medium">
+                    {artisan.name}
+                  </p>
+                  <p className="text-muted-foreground text-xs">
+                    {artisan.address}
+                  </p>
+                  <a
+                    href={`/a/${artisan.handle}`}
+                    className="text-blue-600 text-xs hover:underline"
+                  >
+                    Mehr erfahren &rarr;
+                  </a>
+                </div>
+              </MarkerPopup>
+            </MapMarker>
+          ))}
+        </MapComponent>
+      </div>
       <Ainsart center={false} />
       <div
         ref={containerRef}
