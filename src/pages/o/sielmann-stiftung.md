@@ -1,6 +1,5 @@
 ---
-layout: ../../layouts/markt-organizer.astro
-slug: "sielmann-stiftung"
+layout: ../../layouts/organizer.astro
 name: "Heinz Sielmann Stiftung"
 location: "Duderstadt"
 website: "https://www.sielmann-stiftung.de"
