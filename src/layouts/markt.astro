@@ -1,5 +1,6 @@
 ---
 import Page from "./page.astro";
+import WebsiteLink from "../components/WebsiteLink.astro";
 import { Temporal } from "@js-temporal/polyfill";
 import { Badge } from "../components/ui/badge";
 import {
@@ -66,14 +67,7 @@ const linkedArtisans = Object.entries(artisanModules)
   {
     website && (
       <p>
-        <a
-          href={website}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-blue-600 hover:underline"
-        >
-          Zur Webseite
-        </a>
+        <WebsiteLink href={website} label="Zur Webseite" />
       </p>
     )
   }
