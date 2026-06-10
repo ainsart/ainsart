@@ -1,17 +1,18 @@
 ---
-import "../styles/global.css"
-import Main from "../layouts/main.astro"
-import Karte from "../components/Karte"
+import "../styles/global.css";
+import Main from "../layouts/main.astro";
+import Karte from "../components/Karte";
+import Footer from "../components/Footer.astro";
 
-const marketModules = import.meta.glob("./m/*.md", { eager: true })
-const pages = Object.values(marketModules)
+const marketModules = import.meta.glob("./m/*.md", { eager: true });
+const pages = Object.values(marketModules);
 const events = pages
   .filter((p: any) => p.frontmatter?.badges)
   .map((p: any) => {
     const pagePath = Object.keys(marketModules).find(
       (k) => (marketModules[k] as any) === p,
-    )
-    const handle = pagePath?.split("/").pop()?.replace(".md", "") || ""
+    );
+    const handle = pagePath?.split("/").pop()?.replace(".md", "") || "";
     return {
       title: p.frontmatter.title,
       place: p.frontmatter.place,
@@ -21,28 +22,52 @@ const events = pages
       organizer: p.frontmatter.organizer,
       year: p.frontmatter.year,
       handle,
-    }
-  })
+    };
+  });
 
-const artisanModules = import.meta.glob("./a/*.md", { eager: true })
-const artisans = Object.values(artisanModules)
-  .map((p: any, _idx: number, arr: any[]) => {
+const artisanModules = import.meta.glob("./a/*.md", { eager: true });
+const artisans = Object.values(artisanModules).map(
+  (p: any, _idx: number, arr: any[]) => {
     const pagePath = Object.keys(artisanModules).find(
       (k) => (artisanModules[k] as any) === p,
-    )
-    const handle = pagePath?.split("/").pop()?.replace(".md", "") || ""
+    );
+    const handle = pagePath?.split("/").pop()?.replace(".md", "") || "";
     return {
       handle,
       name: p.frontmatter.name,
       location: p.frontmatter.location,
       address: p.frontmatter.address,
       lnglat: p.frontmatter.lnglat,
-    }
-  })
+    };
+  },
+);
+
+const cafeModules = import.meta.glob("./c/*.md", { eager: true });
+const cafes = Object.values(cafeModules).map(
+  (p: any, _idx: number, arr: any[]) => {
+    const pagePath = Object.keys(cafeModules).find(
+      (k) => (cafeModules[k] as any) === p,
+    );
+    const handle = pagePath?.split("/").pop()?.replace(".md", "") || "";
+    return {
+      handle,
+      name: p.frontmatter.name,
+      location: p.frontmatter.location,
+      address: p.frontmatter.address,
+      lnglat: p.frontmatter.lnglat,
+    };
+  },
+);
 ---
 
 <Main content={{ title: "ains.art" }}>
   <body class="bg-background fixed inset-0 flex h-dvh w-full overflow-hidden">
-    <Karte client:only="react" events={events} artisans={artisans} />
+    <Karte
+      client:only="react"
+      events={events}
+      artisans={artisans}
+      cafes={cafes}
+    />
+    <Footer content={{ socia: false }} />
   </body>
 </Main>
