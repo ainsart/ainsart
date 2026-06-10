@@ -1,0 +1,62 @@
+---
+const { content } = Astro.props;
+import "../styles/global.css";
+import Main from "./main.astro";
+import Ainsart from "../components/Ainsart";
+import Footer from "../components/Footer.astro";
+import WebsiteLink from "../components/WebsiteLink.astro";
+
+const fm = Astro.props.frontmatter || Astro.props.content;
+const {
+  name,
+  location,
+  address,
+  website,
+  instagram,
+  openingHours,
+  description,
+} = fm;
+---
+
+<Main content={{ title: name }}>
+  <body class:list={["bg-background flex h-screen flex-col", "overflow-auto"]}>
+    <main class="container mx-auto max-w-2xl px-4 py-8 mt-12">
+      <Ainsart content={{ center: true }} />
+      <header class="mb-12 text-center">
+        <h1
+          class="mb-2 text-3xl font-bold"
+          style="font-family: 'Libre Baskerville', serif;"
+        >
+          {name}
+        </h1>
+
+        <p class="text-stone-500">
+          {location}
+        </p>
+
+        {address && <p class="text-sm text-stone-400">{address}</p>}
+
+        {website && <WebsiteLink href={website} label="Website" />}
+      </header>
+
+      <article class="prose prose-stone prose-lg mx-auto">
+        <slot />
+      </article>
+
+      <article class="prose prose-stone prose-lg mx-auto">
+        <p class="lead text-stone-600">{description}</p>
+
+        {
+          openingHours && (
+            <div class="not-prose my-6 rounded-lg border bg-card p-4">
+              <p class="text-sm font-medium text-stone-700">{openingHours}</p>
+            </div>
+          )
+        }
+
+        <slot />
+      </article>
+    </main>
+    <Footer content={{ social: true }} />
+  </body>
+</Main>
