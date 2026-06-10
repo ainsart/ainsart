@@ -23,6 +23,12 @@ import {
   type MarktData,
   type ArtisanData,
 } from "../lib/timeline";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
 const LNG_LAT_GOE = [9.936, 51.541];
 
@@ -333,21 +339,18 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
               <MarkerContent>
                 <div className="event-marker" />
               </MarkerContent>
-              <MarkerPopup>
-                <div className="space-y-1">
-                  <p className="text-popover-foreground text-sm font-medium">
-                    {market.title}
-                  </p>
-                  <p className="text-muted-foreground text-xs">
-                    {market.place}
-                  </p>
-                  <a
-                    href={`/m/${market.handle}`}
-                    className="text-blue-600 text-xs hover:underline"
-                  >
-                    Mehr erfahren &rarr;
-                  </a>
-                </div>
+              <MarkerPopup className="p-0 bg-transparent w-[240px] border-none">
+                <a
+                  href={`/m/${market.handle}`}
+                  className="group block no-underline"
+                >
+                  <Card className="cursor-pointer py-5">
+                    <CardHeader className="px-5">
+                      <CardTitle>{market.title}</CardTitle>
+                      <CardDescription>{market.place}</CardDescription>
+                    </CardHeader>
+                  </Card>
+                </a>
               </MarkerPopup>
             </MapMarker>
           ))}
