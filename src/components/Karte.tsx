@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Temporal } from "@js-temporal/polyfill";
 import { Badge } from "@/components/ui/badge";
+import { CalendarHeart, HeartHandshake, HandHeart } from "lucide-react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import Ainsart from "../components/Ainsart";
@@ -22,6 +23,7 @@ import {
   MarktBadge,
   type MarktData,
   type ArtisanData,
+  type CafeData,
 } from "../lib/timeline";
 import {
   Card,
@@ -35,6 +37,7 @@ const LNG_LAT_GOE = [9.936, 51.541];
 interface KarteProps {
   events: MarktData[];
   artisans?: ArtisanData[];
+  cafes?: CafeData[];
 }
 
 function MapEventHandler({
@@ -73,7 +76,11 @@ function MapEventHandler({
   return null;
 }
 
-export default function Karte({ events, artisans = [] }: KarteProps) {
+export default function Karte({
+  events,
+  artisans = [],
+  cafes = [],
+}: KarteProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const timeline = useRef({
@@ -310,17 +317,27 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
     [artisans, bounds],
   );
 
+  const visibleCafes = useMemo(
+    () =>
+      bounds
+        ? cafes.filter((c) =>
+            bounds.contains(c.lnglat as maplibregl.LngLatLike),
+          )
+        : cafes,
+    [cafes, bounds],
+  );
+
   const h = 30;
   return (
-    <main className="h-[100dvh] relative">
+    <main className="h-[calc(100dvh) - 28px] relative">
       <div
         className="w-full select-none"
-        style={{ height: `calc(100dvh - ${3 * h}px)` }}
+        style={{ height: `calc(100dvh - ${3 * h}px - 28px)` }}
       >
         <MapComponent
           styles={{
-            light: "https://tiles.openfreemap.org/styles/liberty",
-            dark: "https://tiles.openfreemap.org/styles/liberty",
+            light: "https://tiles.openfreemap.org/styles/positron",
+            dark: "https://tiles.openfreemap.org/styles/positron",
           }}
           center={LNG_LAT_GOE as [number, number]}
           zoom={10}
@@ -336,16 +353,16 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
               longitude={market.lnglat[0]}
               latitude={market.lnglat[1]}
             >
-              <MarkerContent>
-                <div className="event-marker" />
+              <MarkerContent className="p-1 bg-gray-100 rounded-full aspect-square border-green-600 border-solid border-1">
+                <CalendarHeart className="stroke-green-600" />
               </MarkerContent>
-              <MarkerPopup className="p-0 bg-transparent w-[240px] border-none">
+              <MarkerPopup className="p-0 bg-transparent w-[240px] border-none m-1">
                 <a
                   href={`/m/${market.handle}`}
                   className="group block no-underline"
                 >
-                  <Card className="cursor-pointer py-5">
-                    <CardHeader className="px-5">
+                  <Card className="cursor-pointer py-4">
+                    <CardHeader className="px-4">
                       <CardTitle>{market.title}</CardTitle>
                       <CardDescription>{market.place}</CardDescription>
                     </CardHeader>
@@ -361,24 +378,46 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
               longitude={artisan.lnglat[0]}
               latitude={artisan.lnglat[1]}
             >
-              <MarkerContent>
-                <div className="artisan-marker" />
+              <MarkerContent className="p-1 bg-gray-100 rounded-full aspect-square border-green-600 border-solid border-1">
+                <HandHeart className="stroke-green-600" />
               </MarkerContent>
-              <MarkerPopup>
-                <div className="space-y-1">
-                  <p className="text-popover-foreground text-sm font-medium">
-                    {artisan.name}
-                  </p>
-                  <p className="text-muted-foreground text-xs">
-                    {artisan.address}
-                  </p>
-                  <a
-                    href={`/a/${artisan.handle}`}
-                    className="text-blue-600 text-xs hover:underline"
-                  >
-                    Mehr erfahren &rarr;
-                  </a>
-                </div>
+              <MarkerPopup className="p-0 bg-transparent w-[240px] border-none m-1 shadow-none">
+                <a
+                  href={`/a/${artisan.handle}`}
+                  className="group block no-underline"
+                >
+                  <Card className="cursor-pointer py-4">
+                    <CardHeader className="px-4">
+                      <CardTitle>{artisan.name}</CardTitle>
+                      <CardDescription>{artisan.address}</CardDescription>
+                    </CardHeader>
+                  </Card>
+                </a>
+              </MarkerPopup>
+            </MapMarker>
+          ))}
+
+          {visibleCafes.map((cafe) => (
+            <MapMarker
+              key={cafe.handle}
+              longitude={cafe.lnglat[0]}
+              latitude={cafe.lnglat[1]}
+            >
+              <MarkerContent className="p-1 bg-gray-100 rounded-full aspect-square border-green-600 border-solid border-1">
+                <HeartHandshake className="stroke-green-600" />
+              </MarkerContent>
+              <MarkerPopup className="p-0 bg-transparent w-[240px] border-none m-1 shadow-none">
+                <a
+                  href={`/c/${cafe.handle}`}
+                  className="group block no-underline"
+                >
+                  <Card className="cursor-pointer py-4">
+                    <CardHeader className="px-4">
+                      <CardTitle>{cafe.name}</CardTitle>
+                      <CardDescription>{cafe.address}</CardDescription>
+                    </CardHeader>
+                  </Card>
+                </a>
               </MarkerPopup>
             </MapMarker>
           ))}
@@ -387,7 +426,7 @@ export default function Karte({ events, artisans = [] }: KarteProps) {
       <Ainsart center={false} />
       <div
         ref={containerRef}
-        className={`w-full h-[${3 * h}px] overflow-hidden select-none cursor-grab border-solid border-gray-300`}
+        className={`w-full h-[${3 * h}px] overflow-hidden select-none cursor-grab`}
         style={{
           touchAction: "none",
           willChange: "transform",
