@@ -335,6 +335,14 @@ export interface ArtisanData {
   lnglat: [number, number];
 }
 
+export interface CafeData {
+  handle: string;
+  name: string;
+  location: string;
+  address: string;
+  lnglat: [number, number];
+}
+
 export class Markt {
   constructor(
     readonly title: string,
