@@ -85,7 +85,10 @@ const markets = Object.entries(modules)
         }
       </header>
 
-      <article class="prose prose-stone prose-lg mx-auto">
+      <article class="prose prose-stone mx-auto">
+        <blockquote>
+        {fm.description}
+        </blockquote>
         <slot />
       </article>
 
@@ -98,7 +101,7 @@ const markets = Object.entries(modules)
             >
               Märkte
             </h2>
-            <div class="grid gap-2">
+            <div class="grid gap-4">
               {markets.map((market) => (
                 <a
                   href={`/${market.slug}`}
