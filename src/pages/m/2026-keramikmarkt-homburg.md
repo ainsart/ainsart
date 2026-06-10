@@ -1,6 +1,6 @@
 ---
 layout: ../../layouts/markt.astro
-title: "Keramikmarkt Homburg 2026"
+title: "Keramikmarkt Homburg"
 place: "Homburger Innenstadt"
 website: "https://www.homburg.de/leben-in-homburg/veranstaltungsvielfalt/keramikmarkt/"
 badges:
