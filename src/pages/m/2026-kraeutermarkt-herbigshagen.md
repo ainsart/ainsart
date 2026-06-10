@@ -1,6 +1,6 @@
 ---
 layout: ../../layouts/markt.astro
-title: "Kräutermarkt Gut Herbigshagen 2026"
+title: "Kräutermarkt Gut Herbigshagen"
 place: "Gut Herbigshagen, Duderstadt"
 website: "https://www.sielmann-stiftung.de/news/detail/kraeutermarkt-auf-gut-herbigshagen-laedt-zum-start-in-die-gartensaison-ein-1"
 badges:
