@@ -4,6 +4,7 @@ import "../styles/global.css";
 import Main from "./main.astro";
 import Ainsart from "../components/Ainsart";
 import Footer from "../components/Footer.astro";
+import WebsiteLink from "../components/WebsiteLink.astro";
 import { Temporal } from "@js-temporal/polyfill";
 import { Badge } from "../components/ui/badge";
 import {
@@ -79,14 +80,7 @@ const markets = Object.entries(modules)
 
         {
           fm.website && (
-            <a
-              href={fm.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-blue-600 hover:underline"
-            >
-              Zur Website
-            </a>
+            <WebsiteLink href={fm.website} label="Zur Website" />
           )
         }
       </header>
