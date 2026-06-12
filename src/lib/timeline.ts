@@ -323,6 +323,7 @@ export interface MarktData {
   badges: { start: string; end: string; title?: string }[];
   lnglat: [number, number];
   organizer: string;
+  description: string;
   year: number;
   handle: string;
 }
@@ -331,6 +332,7 @@ export interface ArtisanData {
   handle: string;
   name: string;
   location: string;
+  description: string;
   address: string;
   lnglat: [number, number];
 }
@@ -338,6 +340,7 @@ export interface ArtisanData {
 export interface CafeData {
   handle: string;
   name: string;
+  description: string;
   location: string;
   address: string;
   lnglat: [number, number];
@@ -353,6 +356,7 @@ export class Markt {
     readonly lnglat: [number, number],
     readonly organizer: string,
     readonly handle: string,
+    readonly description: string,
   ) {}
   get id(): string {
     return slug(this.title);
@@ -391,13 +395,17 @@ export function createEvents(data: MarktData[]): Markt[] {
             ),
         ),
         new MarktBadge(
-          Temporal.ZonedDateTime.from(d.badges.at(0)!.start),
-          Temporal.ZonedDateTime.from(d.badges.at(-1)!.end),
+          Temporal.ZonedDateTime.from(d.badges.at(0)!.start).with(TIME_ZERO),
+          Temporal.ZonedDateTime.from(d.badges.at(-1)!.end)
+            .with(TIME_ZERO)
+            .add({ days: 1 })
+            .subtract({ nanoseconds: 1 }),
           d.title,
         ),
         d.lnglat,
         d.organizer,
         d.handle,
+        d.description,
       ),
   );
 }
