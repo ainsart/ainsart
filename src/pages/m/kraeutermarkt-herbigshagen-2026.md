@@ -6,6 +6,7 @@ website: "https://www.sielmann-stiftung.de/news/detail/kraeutermarkt-auf-gut-her
 badges:
   - start: "2026-04-06T11:00+02:00[Europe/Berlin]"
     end: "2026-04-06T17:00+02:00[Europe/Berlin]"
+description: "Frische Kräuter, junge Pflanzen und frühlingshafte Inspiration auf Gut Herbigshagen."
 lnglat: [10.3107996, 51.5235872]
 organizer: "sielmann-stiftung"
 year: 2026
