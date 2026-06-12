@@ -22,6 +22,7 @@ const events = pages
       organizer: p.frontmatter.organizer,
       year: p.frontmatter.year,
       handle,
+      description: p.frontmatter.description,
     };
   });
 
@@ -36,6 +37,7 @@ const artisans = Object.values(artisanModules).map(
       handle,
       name: p.frontmatter.name,
       location: p.frontmatter.location,
+      description: p.frontmatter.description,
       address: p.frontmatter.address,
       lnglat: p.frontmatter.lnglat,
     };
@@ -54,6 +56,7 @@ const cafes = Object.values(cafeModules).map(
       name: p.frontmatter.name,
       location: p.frontmatter.location,
       address: p.frontmatter.address,
+      description: p.frontmatter.description,
       lnglat: p.frontmatter.lnglat,
     };
   },
