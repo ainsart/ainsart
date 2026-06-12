@@ -372,7 +372,7 @@ export default function Karte({
                   <Card className="cursor-pointer py-4">
                     <CardHeader className="px-4">
                       <CardTitle>{market.title}</CardTitle>
-                      <CardDescription>{market.place}</CardDescription>
+                      <CardDescription>{market.description}</CardDescription>
                     </CardHeader>
                   </Card>
                 </a>
@@ -397,7 +397,7 @@ export default function Karte({
                   <Card className="cursor-pointer py-4">
                     <CardHeader className="px-4">
                       <CardTitle>{artisan.name}</CardTitle>
-                      <CardDescription>{artisan.address}</CardDescription>
+                      <CardDescription>{artisan.description}</CardDescription>
                     </CardHeader>
                   </Card>
                 </a>
@@ -422,7 +422,7 @@ export default function Karte({
                   <Card className="cursor-pointer py-4">
                     <CardHeader className="px-4">
                       <CardTitle>{cafe.name}</CardTitle>
-                      <CardDescription>{cafe.address}</CardDescription>
+                      <CardDescription>{cafe.description}</CardDescription>
                     </CardHeader>
                   </Card>
                 </a>
