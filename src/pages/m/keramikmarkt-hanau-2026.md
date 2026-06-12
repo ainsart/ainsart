@@ -11,7 +11,8 @@ badges:
 lnglat: [8.9189729, 50.1381418]
 organizer: "hanau"
 year: 2026
-artisans: []
+artisans:
+  - "tito-keramik"
 ---
 
 Der Internationale Keramikmarkt präsentiert handgefertigte Keramiken von über 40 Ausstellern aus dem In- und Ausland im barocken Schlossgarten des Congress Park Hanau.
