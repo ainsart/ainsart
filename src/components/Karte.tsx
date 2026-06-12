@@ -353,8 +353,16 @@ export default function Karte({
               longitude={market.lnglat[0]}
               latitude={market.lnglat[1]}
             >
-              <MarkerContent className="p-1 bg-gray-100 rounded-full aspect-square border-green-600 border-solid border-1">
-                <CalendarHeart className="stroke-green-600" />
+              <MarkerContent
+                className={`p-1 bg-gray-100 rounded-full aspect-square ${market.badge.isPast(layout.nowMilliseconds) ? "border-gray-300" : "border-green-600"} border-solid border-1`}
+              >
+                <CalendarHeart
+                  className={
+                    market.badge.isPast(layout.nowMilliseconds)
+                      ? "stroke-gray-400"
+                      : "stroke-green-600"
+                  }
+                />
               </MarkerContent>
               <MarkerPopup className="p-0 bg-transparent w-[240px] border-none m-1">
                 <a
