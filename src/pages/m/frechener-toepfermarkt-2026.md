@@ -8,6 +8,7 @@ badges:
     end: "2026-05-09T18:00+02:00[Europe/Berlin]"
   - start: "2026-05-10T11:00+02:00[Europe/Berlin]"
     end: "2026-05-10T17:00+02:00[Europe/Berlin]"
+description: "Zweitägiger Töpfermarkt rund um das Keramion in Frechen mit internationaler Studiokeramik."
 lnglat: [6.8082376, 50.9087843]
 organizer: "keramion"
 year: 2026
