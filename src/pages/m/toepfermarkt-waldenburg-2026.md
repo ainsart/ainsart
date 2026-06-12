@@ -8,6 +8,7 @@ badges:
     end: "2026-06-13T18:00+02:00[Europe/Berlin]"
   - start: "2026-06-14T10:00+02:00[Europe/Berlin]"
     end: "2026-06-14T18:00+02:00[Europe/Berlin]"
+description: "Kunstvolle Zier- und Gebrauchskeramik auf dem idyllischen Freiheitsplatz in Waldenburg."
 lnglat: [12.6166301, 50.8725821]
 organizer: "waldenburg"
 year: 2026
