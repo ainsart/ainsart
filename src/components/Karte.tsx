@@ -336,8 +336,8 @@ export default function Karte({
       >
         <MapComponent
           styles={{
-            light: "https://tiles.openfreemap.org/styles/positron",
-            dark: "https://tiles.openfreemap.org/styles/positron",
+            light: "https://tiles.openfreemap.org/styles/bright",
+            dark: "https://tiles.openfreemap.org/styles/bright",
           }}
           center={LNG_LAT_GOE as [number, number]}
           zoom={10}
@@ -354,13 +354,13 @@ export default function Karte({
               latitude={market.lnglat[1]}
             >
               <MarkerContent
-                className={`p-1 bg-gray-100 rounded-full aspect-square ${market.badge.isPast(layout.nowMilliseconds) ? "border-gray-300" : "border-green-600"} border-solid border-1`}
+                className={`p-1 bg-gray-100 rounded-full aspect-square ${market.badge.isPast(layout.nowMilliseconds) ? "border-gray-300" : "border-yellow-500"} border-solid border-1`}
               >
                 <CalendarHeart
                   className={
                     market.badge.isPast(layout.nowMilliseconds)
                       ? "stroke-gray-400"
-                      : "stroke-green-600"
+                      : "stroke-yellow-500"
                   }
                 />
               </MarkerContent>
@@ -456,7 +456,7 @@ export default function Karte({
             strokeWidth={1}
           />
           {visibleMarkets.map((m: Markt) => {
-            if (layout.ppd < 30) {
+            if (layout.ppd < 240) {
               return (
                 <foreignObject
                   key={m.badge.id}
@@ -465,10 +465,11 @@ export default function Karte({
                   width={m.badge.width(layout.ppd)}
                   height={h}
                 >
-                  <div
-                    className={`w-full h-full flex items-center justify-center`}
-                  >
-                    <Badge variant="event" className="flex w-full h-[22px]">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <Badge
+                      variant="event"
+                      className={`flex w-full h-[22px] ${m.badge.isFuture(layout.nowMilliseconds) && "border-yellow-500 text-yellow-500"}`}
+                    >
                       {m.badge.label(layout.ppd)}
                     </Badge>
                   </div>
@@ -487,7 +488,10 @@ export default function Karte({
                     <div
                       className={`w-full h-full flex items-center justify-center`}
                     >
-                      <Badge variant="event" className="flex w-full h-[22px]">
+                      <Badge
+                        variant="event"
+                        className={`flex w-full h-[22px] ${m.badge.isFuture(layout.nowMilliseconds) && "border-yellow-500 text-yellow-500"}`}
+                      >
                         {b.label(layout.ppd)}
                       </Badge>
                     </div>
