@@ -10,6 +10,7 @@ badges:
     end: "2026-05-02T18:00+02:00[Europe/Berlin]"
   - start: "2026-05-03T11:00+02:00[Europe/Berlin]"
     end: "2026-05-03T17:00+02:00[Europe/Berlin]"
+description: "Kunsthandwerkermarkt mit handgefertigten Unikaten und Kleinserien im Clamartpark Lüneburg."
 lnglat: [10.4094815, 53.2457263]
 organizer: "birgit-rehse"
 year: 2026
