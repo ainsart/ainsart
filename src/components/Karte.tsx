@@ -25,12 +25,7 @@ import {
   type ArtisanData,
   type CafeData,
 } from "../lib/timeline";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { MarkerPopupCard } from "@/components/ui/marker-popup-card";
 
 const LNG_LAT_GOE = [9.936, 51.541];
 
@@ -364,19 +359,11 @@ export default function Karte({
                   }
                 />
               </MarkerContent>
-              <MarkerPopup className="p-0 bg-transparent w-[240px] border-none m-1">
-                <a
-                  href={`/m/${market.handle}`}
-                  className="group block no-underline"
-                >
-                  <Card className="cursor-pointer py-4">
-                    <CardHeader className="px-4">
-                      <CardTitle>{market.title}</CardTitle>
-                      <CardDescription>{market.description}</CardDescription>
-                    </CardHeader>
-                  </Card>
-                </a>
-              </MarkerPopup>
+              <MarkerPopupCard
+                href={`/m/${market.handle}`}
+                name={market.title}
+                description={market.description}
+              />
             </MapMarker>
           ))}
 
@@ -389,19 +376,11 @@ export default function Karte({
               <MarkerContent className="p-1 bg-gray-100 rounded-full aspect-square border-green-600 border-solid border-1">
                 <HandHeart className="stroke-green-600" />
               </MarkerContent>
-              <MarkerPopup className="p-0 bg-transparent w-[240px] border-none m-1 shadow-none">
-                <a
-                  href={`/a/${artisan.handle}`}
-                  className="group block no-underline"
-                >
-                  <Card className="cursor-pointer py-4">
-                    <CardHeader className="px-4">
-                      <CardTitle>{artisan.name}</CardTitle>
-                      <CardDescription>{artisan.description}</CardDescription>
-                    </CardHeader>
-                  </Card>
-                </a>
-              </MarkerPopup>
+              <MarkerPopupCard
+                href={`/a/${artisan.handle}`}
+                name={artisan.name}
+                description={artisan.description}
+              />
             </MapMarker>
           ))}
 
@@ -414,19 +393,11 @@ export default function Karte({
               <MarkerContent className="p-1 bg-gray-100 rounded-full aspect-square border-green-600 border-solid border-1">
                 <HeartHandshake className="stroke-green-600" />
               </MarkerContent>
-              <MarkerPopup className="p-0 bg-transparent w-[240px] border-none m-1 shadow-none">
-                <a
-                  href={`/c/${cafe.handle}`}
-                  className="group block no-underline"
-                >
-                  <Card className="cursor-pointer py-4">
-                    <CardHeader className="px-4">
-                      <CardTitle>{cafe.name}</CardTitle>
-                      <CardDescription>{cafe.description}</CardDescription>
-                    </CardHeader>
-                  </Card>
-                </a>
-              </MarkerPopup>
+              <MarkerPopupCard
+                href={`/c/${cafe.handle}`}
+                name={cafe.name}
+                description={cafe.description}
+              />
             </MapMarker>
           ))}
         </MapComponent>
