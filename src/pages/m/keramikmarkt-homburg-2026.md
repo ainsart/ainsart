@@ -8,6 +8,7 @@ badges:
     end: "2026-03-21T18:00+01:00[Europe/Berlin]"
   - start: "2026-03-22T13:00+01:00[Europe/Berlin]"
     end: "2026-03-22T18:00+01:00[Europe/Berlin]"
+description: "Einzigartige Keramik aus Deutschland und Europa in der Homburger Innenstadt."
 lnglat: [7.3411578, 49.3213082]
 organizer: "homburg"
 year: 2026
