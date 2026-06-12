@@ -1,6 +1,6 @@
 ---
 layout: ../../layouts/markt.astro
-title: "Keramikmarkt Paderborn 2026"
+title: "Keramikmarkt Paderborn"
 place: "Neuhäuser Schlosspark"
 website: "https://www.paderborn.de/tourismus-kultur/veranstaltungen/Keramikmarkt.php"
 badges:
