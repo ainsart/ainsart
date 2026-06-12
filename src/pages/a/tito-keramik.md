@@ -13,6 +13,7 @@ markets:
   - "keramikmarkt-paderborn-2026"
   - "kraeutermarkt-herbigshagen-2026"
   - "toepfermarkt-iffezheim-2026"
+  - "toepfermarkt-waldenburg-2026"
 ---
 
 Seit Juli 2023 fertigt Tito Keramik in der Produktionsstätte in Göttingen
