@@ -409,6 +409,10 @@ export default function Karte({
         style={{
           touchAction: "none",
           willChange: "transform",
+          maskImage:
+            "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
         }}
         onClick={handleTimelineClick}
       >
