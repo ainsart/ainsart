@@ -1,6 +1,6 @@
 ---
 layout: ../../layouts/markt.astro
-title: "Frechener Töpfermarkt 2026"
+title: "Frechener Töpfermarkt"
 place: "Rathausplatz, Johann-Schmitz-Platz 1-3, Frechen"
 website: "https://toepfermarkt.keramion.de/besucherinformation"
 badges:
