@@ -10,6 +10,7 @@ badges:
     end: "2026-05-24T19:00+02:00[Europe/Berlin]"
   - start: "2026-05-25T11:00+02:00[Europe/Berlin]"
     end: "2026-05-25T18:00+02:00[Europe/Berlin]"
+description: "80 Töpferwerkstätten aus ganz Europa in der Freilufthalle am Rennplatz Iffezheim."
 lnglat: [8.1453356, 48.8282571]
 organizer: "art-e-promusis"
 year: 2026
