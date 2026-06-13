@@ -68,6 +68,19 @@ function MapEventHandler({
     };
   }, [map, onBoundsChange]);
 
+  useEffect(() => {
+    if (!map) return;
+    const handleContextMenu = (e: maplibregl.MapMouseEvent) => {
+      e.preventDefault();
+      const { lng, lat } = e.lngLat;
+      navigator.clipboard.writeText(`${lng.toFixed(5)}, ${lat.toFixed(5)}`);
+    };
+    map.on("contextmenu", handleContextMenu);
+    return () => {
+      map.off("contextmenu", handleContextMenu);
+    };
+  }, [map]);
+
   return null;
 }
 
