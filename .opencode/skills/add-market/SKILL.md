@@ -57,6 +57,7 @@ Brief description (1 sentence).
 **Rules:**
 
 - `slug` must match the filename (e.g. file `art-e-promusis.md` → `slug: "art-e-promusis"`). Kebab-case.
+- If the filename already is the slug (e.g. `homburg.md` → organizer slug `homburg`), `slug` can be omitted — but it's safer to always include it for consistency. The layout (`organizer.astro`) reads `slug` from frontmatter and matches against market `organizer` fields.
 - Omit `location` if unknown.
 - `website` not `url` (reserved by Astro).
 
@@ -119,7 +120,7 @@ Run `bunx astro check` to catch TypeScript/frontmatter issues.
 ## Important gotchas
 
 - **`url` is reserved** in Astro frontmatter (overrides page URL). Always use `website`.
-- **Organizer pages need `slug`** field matching their filename for `markt-organizer.astro` to find them.
+- **Organizer pages use `organizer.astro`** layout (not `markt-organizer.astro` — that name was outdated). The slug field (or filename) links to markets via the `organizer` frontmatter field on market pages.
 - **Artisans list** on market pages uses full filename (e.g. `"tito-keramik"`), matched against `a/*.md` without `.md`.
 - **No tests**, no ESLint, `trailingSlash: "never"`, German locale (`de-DE`), OKLCH colors.
 - **Geocoding**: max 1 req/s. Only query when the user actually needs a new market added.
