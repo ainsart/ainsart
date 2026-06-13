@@ -8,6 +8,7 @@ badges:
     end: "2026-06-27T18:00+02:00[Europe/Berlin]"
   - start: "2026-06-28T11:00+02:00[Europe/Berlin]"
     end: "2026-06-28T18:00+02:00[Europe/Berlin]"
+description: "Handgefertigte Keramiken von über 40 Ausstellern aus dem In- und Ausland im barocken Schlossgarten."
 lnglat: [8.9189729, 50.1381418]
 organizer: "hanau"
 year: 2026
