@@ -9,7 +9,8 @@ website: "https://www.tito-keramik.de"
 markets:
   - toepferkunstmarkt-spaethsche-baumschulen-2026
   - buergeler-toepfermarkt-2026
-  - kunsthandwerkermarkt-lueneburg-2026
+  - exklusiv-schoen-bleckede-2026
+  - exklusiv-schoen-lueneburg-2026
   - frechener-toepfermarkt-2026
   - keramikmarkt-hanau-2026
   - keramikmarkt-homburg-2026
@@ -20,6 +21,9 @@ markets:
   - ton-am-dom-2026
   - ratzeburger-toepfermarkt-2026
   - toepfermarkt-kellinghusen-2026
+  - wittenberger-toepfermarkt-2026
+  - toepfermarkt-naumburg-2026
+  - rheinsberger-toepfermarkt-2026
 ---
 
 Seit Juli 2023 fertigt Tito Keramik in der Produktionsstätte in Göttingen
