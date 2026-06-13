@@ -1,6 +1,6 @@
 ---
 layout: ../../layouts/markt.astro
-title: "Kunsthandwerkermarkt Lüneburg"
+title: "Exklusiv & Schön – Kunsthandwerkermarkt Lüneburg"
 place: "Clamartpark, Lüneburg"
 website: "https://www.keramikmaerkte.de/toepfermaerkte/exklusiv-schoen-kunst-handwerk-design-in-lueneburg/"
 badges:
