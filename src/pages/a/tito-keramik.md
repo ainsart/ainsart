@@ -8,7 +8,7 @@ description: "Frostharte Gartenkeramik und alltagstaugliche Geschirre aus Götti
 website: "https://www.tito-keramik.de"
 markets:
   - buergeler-toepfermarkt-2026
-  - exklusiv-schoen-lueneburg-2026
+  - kunsthandwerkermarkt-lueneburg-2026
   - frechener-toepfermarkt-2026
   - keramikmarkt-hanau-2026
   - keramikmarkt-homburg-2026
@@ -16,6 +16,7 @@ markets:
   - kraeutermarkt-herbigshagen-2026
   - toepfermarkt-iffezheim-2026
   - toepfermarkt-waldenburg-2026
+  - ton-am-dom-2026
 ---
 
 Seit Juli 2023 fertigt Tito Keramik in der Produktionsstätte in Göttingen
