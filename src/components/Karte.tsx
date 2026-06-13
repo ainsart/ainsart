@@ -443,7 +443,7 @@ export default function Karte({
                   <div className="w-full h-full flex items-center justify-center">
                     <Badge
                       variant="event"
-                      className={`flex w-full h-[22px] ${m.badge.isFuture(layout.nowMilliseconds) && "border-yellow-500 text-yellow-500"}`}
+                      className={`flex w-full h-[22px] ${!m.badge.isPast(layout.nowMilliseconds) && "border-yellow-500 text-yellow-500"}`}
                     >
                       {m.badge.label(layout.ppd)}
                     </Badge>
@@ -465,7 +465,7 @@ export default function Karte({
                     >
                       <Badge
                         variant="event"
-                        className={`flex w-full h-[22px] ${m.badge.isFuture(layout.nowMilliseconds) && "border-yellow-500 text-yellow-500"}`}
+                        className={`flex w-full h-[22px] ${!m.badge.isPast(layout.nowMilliseconds) && "border-yellow-500 text-yellow-500"}`}
                       >
                         {b.label(layout.ppd)}
                       </Badge>
