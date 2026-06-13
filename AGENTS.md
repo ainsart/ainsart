@@ -54,7 +54,7 @@ src/
 │   ├── main.astro       # Base HTML layout
 │   ├── page.astro       # Content page wrapper (max-w-2xl prose)
 │   ├── artisan.astro    # Artisan profile layout (title=handle, name=display)
-│   └── markt-*.astro    # Organizer listing, organizer profile, event edition
+│   ├── organizer.astro  # Organizer listing (markets by slug)
 ├── lib/
 │   ├── utils.ts         # cn() utility
 │   └── events.ts        # Event, EventBadge classes + createEvents() + EventData type
@@ -84,7 +84,7 @@ src/
 
 ```yaml
 ---
-layout: ../../layouts/markt-organizer.astro
+layout: ../../layouts/organizer.astro
 slug: "paderborn" # links to markets via organizer field
 name: "Schlosspark und Lippesee Gesellschaft"
 location: "Paderborn"
@@ -141,7 +141,7 @@ const modules = import.meta.glob("./m/*.md", { eager: true })
 const events = Object.values(modules)
   .filter((p: any) => p.frontmatter?.badges)
 
-// markt-organizer.astro — find markets for this organizer
+// organizer.astro — find markets for this organizer
 const { slug } = Astro.props.frontmatter
 const modules = import.meta.glob("../pages/m/*.md", { eager: true })
 const markets = Object.entries(modules)
@@ -178,7 +178,7 @@ const fm = Astro.props.frontmatter || Astro.props.content;
 
 - **`url` is reserved** in Astro frontmatter (overrides to page URL). Use `website` instead.
 - **`@*.md` glob captures all three page types** — always filter by frontmatter fields (`badges`, `slug`, `organizer`).
-- **Organizer pages need `slug`** field for `markt-organizer.astro` to match markets via `organizer` field.
+- **Organizer pages need `slug`** field to match markets via `organizer` field in `organizer.astro`.
 - **Artisans list on market pages** uses full filename (e.g., `"tito-keramik"`), matched against `m/*.md` without `.md`.
 - **No tests**, no ESLint, `trailingSlash: "never"`, German locale (`de-DE`), OKLCH colors.
 - **Astro 6**: `import.meta.glob`, not `Astro.glob`; `Astro.props.frontmatter` in md layouts.
