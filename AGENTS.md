@@ -85,7 +85,6 @@ src/
 ```yaml
 ---
 layout: ../../layouts/organizer.astro
-slug: "paderborn" # links to markets via organizer field
 name: "Schlosspark und Lippesee Gesellschaft"
 location: "Paderborn"
 website: "https://www.schlosspark-paderborn.de"
