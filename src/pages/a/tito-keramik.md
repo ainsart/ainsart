@@ -17,6 +17,7 @@ markets:
   - toepfermarkt-iffezheim-2026
   - toepfermarkt-waldenburg-2026
   - ton-am-dom-2026
+  - ratzeburger-toepfermarkt-2026
 ---
 
 Seit Juli 2023 fertigt Tito Keramik in der Produktionsstätte in Göttingen
