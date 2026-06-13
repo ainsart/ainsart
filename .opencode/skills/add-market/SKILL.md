@@ -85,7 +85,6 @@ year: <YYYY>
 artisans:
   - "<artisan-filename>" # OPTIONAL — matches artisan filename without .md
 ---
-1–2 sentence factual description. No hyperlinks here. German locale.
 ```
 
 **Rules:**
@@ -96,16 +95,26 @@ artisans:
 - Always include a `description` field in the frontmatter: a single-line summary of the market.
 - `artisans` list is optional. Only include artisans that exist in `src/pages/a/*.md`.
 - Badges: one entry per day, with its own start/end time. Do NOT create one long spanning badge.
+- **Description goes in frontmatter, not body.** The market body (below `---`) can be empty or contain extended prose, but the `description` field in frontmatter is the short summary shown on the map/timeline.
 
-### 5. Resolve coordinates
+### 5. Update artisan backlinks
+
+For each artisan listed in the market's `artisans` field:
+1. Read their file at `src/pages/a/<slug>.md`
+2. Add the market slug (e.g. `toepfermarkt-naumburg-2026`) to their `markets` list in frontmatter
+3. This creates a backlink from the artisan profile page to the new market page
+
+**Important:** Always do this. Both directions must be linked — market → artisan (via `artisans` field) AND artisan → market (via `markets` field).
+
+### 6. Resolve coordinates
 
 Call the `nominatim-geocode` skill (`skill({ name: "nominatim-geocode" })`) to resolve `lnglat` from the place/address.
 
-### 6. Format
+### 7. Format
 
-Run `bunx prettier --write src/pages/o/<file> src/pages/m/<file>`.
+Run `bunx prettier --write src/pages/o/<file> src/pages/m/<file>` (and any artisan files you modified).
 
-### 7. Verify
+### 8. Verify
 
 Run `bunx astro check` to catch TypeScript/frontmatter issues.
 
