@@ -23,6 +23,7 @@ markets:
   - toepfermarkt-kellinghusen-2026
   - wittenberger-toepfermarkt-2026
   - toepfermarkt-naumburg-2026
+  - goettinger-weihnachtsmarkt-2026
   - rheinsberger-toepfermarkt-2026
 ---
 
