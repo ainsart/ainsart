@@ -7,6 +7,7 @@ lnglat: [9.8849905, 51.5653225]
 description: "Frostharte Gartenkeramik und alltagstaugliche Geschirre aus Göttingen."
 website: "https://www.tito-keramik.de"
 markets:
+  - toepferkunstmarkt-spaethsche-baumschulen-2026
   - buergeler-toepfermarkt-2026
   - kunsthandwerkermarkt-lueneburg-2026
   - frechener-toepfermarkt-2026
@@ -18,6 +19,7 @@ markets:
   - toepfermarkt-waldenburg-2026
   - ton-am-dom-2026
   - ratzeburger-toepfermarkt-2026
+  - toepfermarkt-kellinghusen-2026
 ---
 
 Seit Juli 2023 fertigt Tito Keramik in der Produktionsstätte in Göttingen
