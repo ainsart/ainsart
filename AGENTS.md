@@ -35,8 +35,9 @@ No test runner, ESLint, or lint scripts. No tests to run.
 **Naming** — PascalCase components, camelCase utilities, kebab-case pages. Boolean props prefix with `is` or `has`.
 
 **Exports** — Named exports. Export component and variant separately for cva:
+
 ```typescript
-export { Button, buttonVariants }
+export { Button, buttonVariants };
 ```
 
 ## Project Structure
@@ -80,10 +81,11 @@ src/
 **No shared data file, no content collections, no database.** All structured data lives in the frontmatter of `*.md` pages under `src/pages/`. Pages are organized by type into subdirectories (`a/`, `o/`, `m/`), not by `@` filename prefix. Page type is determined by its layout, not its directory.
 
 ### Organizer page (`o/schlosspark-paderborn.md`)
+
 ```yaml
 ---
 layout: ../../layouts/markt-organizer.astro
-slug: "paderborn"          # links to markets via organizer field
+slug: "paderborn" # links to markets via organizer field
 name: "Schlosspark und Lippesee Gesellschaft"
 location: "Paderborn"
 website: "https://www.schlosspark-paderborn.de"
@@ -91,33 +93,35 @@ website: "https://www.schlosspark-paderborn.de"
 ```
 
 ### Market edition page (`m/keramikmarkt-paderborn-2026.md`)
+
 ```yaml
 ---
 layout: ../../layouts/markt.astro
 title: "Keramikmarkt Paderborn"
 place: "Neuhäuser Schlosspark"
-website: "https://www.paderborn.de/..."   # NOT "url" — reserved by Astro
+website: "https://www.paderborn.de/..." # NOT "url" — reserved by Astro
 badges:
   - start: "2026-04-25T11:00+02:00[Europe/Berlin]"
     end: "2026-04-25T18:00+02:00[Europe/Berlin]"
     title: "Keramikmarkt Paderborn"
 lnglat: [8.7105392, 51.7453595]
-organizer: "paderborn"     # matches organizer's slug
+description: "Einzeilige Kurzbeschreibung des Markts (wird in Karte/Timeline als Zusammenfassung verwendet)"
+organizer: "paderborn" # matches organizer's slug
 year: 2026
 artisans:
-  - "tito-keramik"        # matches artisan filename (without .md)
+  - "tito-keramik" # matches artisan filename (without .md)
 ---
-
 Auf dem Keramikmarkt im Schlosspark Neuhaus präsentieren Kunsthandwerker handgefertigtes Geschirr, Vasen und Kunstobjekte inmitten barocker Gartenkulisse.
 ```
 
 **Market body content** — keep descriptions short (1–2 sentences), factual, no hyperlinks. The layout renders body text via `<slot />` in `prose`. The `website` field already provides the link.
 
 ### Artisan profile page (`a/tito-keramik.md`)
+
 ```yaml
 ---
 layout: ../../layouts/artisan.astro
-title: "tito-keramik"      # handle/slug (also the filename without .md)
+title: "tito-keramik" # handle/slug (also the filename without .md)
 name: "Tito Keramik"
 location: "Göttingen"
 ---
@@ -155,13 +159,15 @@ const linkedArtisans = Object.entries(modules)
 ### Layout frontmatter access
 
 In layouts used by `.md` pages, access via `Astro.props.frontmatter`:
+
 ```astro
 const { title, place, badges = [] } = Astro.props.frontmatter
 ```
 
 `artisan.astro` supports both `.md` (frontmatter) and `.astro` (content):
+
 ```typescript
-const fm = Astro.props.frontmatter || Astro.props.content
+const fm = Astro.props.frontmatter || Astro.props.content;
 ```
 
 ### Karte component contract
