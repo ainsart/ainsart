@@ -33,17 +33,19 @@ const markets = Object.entries(modules)
     return (marketSlugs as string[]).includes(slug);
   })
   .map(([path, mod]: [string, any]) => {
-    const badges = (mod.frontmatter?.badges as any[] ?? []).map((badge: any) => {
-      const start = Temporal.ZonedDateTime.from(badge.start);
-      const end = Temporal.ZonedDateTime.from(badge.end);
-      const date = start.toLocaleString("de-DE", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      });
-      const time = `${start.toLocaleString("de-DE", { hour: "2-digit", minute: "2-digit" })} – ${end.toLocaleString("de-DE", { hour: "2-digit", minute: "2-digit" })} Uhr`;
-      return { ...badge, date, time };
-    });
+    const badges = ((mod.frontmatter?.badges as any[]) ?? []).map(
+      (badge: any) => {
+        const start = Temporal.ZonedDateTime.from(badge.start);
+        const end = Temporal.ZonedDateTime.from(badge.end);
+        const date = start.toLocaleString("de-DE", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+        const time = `${start.toLocaleString("de-DE", { hour: "2-digit", minute: "2-digit" })} – ${end.toLocaleString("de-DE", { hour: "2-digit", minute: "2-digit" })} Uhr`;
+        return { ...badge, date, time };
+      },
+    );
     return {
       slug: path.split("/pages/")[1]?.replace(".md", ""),
       title: mod.frontmatter?.title,
@@ -51,7 +53,9 @@ const markets = Object.entries(modules)
       badges,
     };
   })
-  .sort((a, b) => (a.badges[0]?.start ?? "").localeCompare(b.badges[0]?.start ?? ""));
+  .sort((a, b) =>
+    (a.badges[0]?.start ?? "").localeCompare(b.badges[0]?.start ?? ""),
+  );
 ---
 
 <Main content={{ title: content.title }}>
@@ -78,17 +82,11 @@ const markets = Object.entries(modules)
           {fm.name}
         </h1>
 
-        {
-          fm.website && (
-            <WebsiteLink href={fm.website} label="Zur Website" />
-          )
-        }
+        {fm.website && <WebsiteLink href={fm.website} label="Zur Website" />}
       </header>
 
-      <article class="prose prose-stone mx-auto">
-        <blockquote>
-        {fm.description}
-        </blockquote>
+      <article class="prose prose-stone mx-auto description-wrapper">
+        {fm.description && <p class="description">{fm.description}</p>}
         <slot />
       </article>
 
@@ -103,16 +101,11 @@ const markets = Object.entries(modules)
             </h2>
             <div class="grid gap-4">
               {markets.map((market) => (
-                <a
-                  href={`/${market.slug}`}
-                  class="group block no-underline"
-                >
+                <a href={`/${market.slug}`} class="group block no-underline">
                   <Card>
                     <CardHeader>
                       <CardTitle>{market.title}</CardTitle>
-                      <CardDescription>
-                        {market.place}
-                      </CardDescription>
+                      <CardDescription>{market.place}</CardDescription>
                       <div class="mt-1 flex flex-wrap gap-1">
                         {market.badges.map((badge: any) => (
                           <Badge variant="event">
@@ -132,3 +125,9 @@ const markets = Object.entries(modules)
   </body>
   <Footer content={{ social: true }} />
 </Main>
+
+<style>
+  .description:not(:only-child) {
+    display: none;
+  }
+</style>
