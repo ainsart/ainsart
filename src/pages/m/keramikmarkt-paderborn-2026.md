@@ -15,6 +15,7 @@ year: 2026
 artisans:
   - "keramik-frank-breiter"
   - "tito-keramik"
+  - "francesca-buda"
 ---
 
 Auf dem Keramikmarkt im Schlosspark Neuhaus präsentieren Kunsthandwerker handgefertigtes Geschirr, Vasen und Kunstobjekte inmitten barocker Gartenkulisse.
