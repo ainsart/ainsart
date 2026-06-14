@@ -14,6 +14,7 @@ organizer: "homburg"
 year: 2026
 artisans:
   - "tito-keramik"
+  - "francesca-buda"
 ---
 
 Kunsthandwerker aus ganz Deutschland und Europa präsentieren einzigartige Keramik – von stilvollem Alltagsgeschirr über kunstvolle Skulpturen bis hin zu Deko für Ostern. Besonderes Highlight: Der Europäische Kulturpark Bliesbruck-Reinheim lässt Kinder selbst kreativ werden.
