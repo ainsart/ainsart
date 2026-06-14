@@ -13,6 +13,7 @@ description: "Über 70 Stände mit handgefertigter Keramik auf dem oberen und un
 organizer: "kellinghusen"
 year: 2026
 artisans:
+  - "keramik-frank-breiter"
   - "tito-keramik"
 ---
 
