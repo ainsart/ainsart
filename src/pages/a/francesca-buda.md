@@ -7,9 +7,11 @@ description: "Italienische Keramikerin mit Sitz in Deutschland, arbeitet vorwieg
 lnglat: [8.67834693059165, 50.584123908537904]
 instagram: "francesca_buda"
 markets:
-  - keramikmarkt-homburg-2026
+  - darmsheimer-toepfermarkt-2026
   - frechener-toepfermarkt-2026
+  - keramikmarkt-homburg-2026
   - keramikmarkt-paderborn-2026
+  - toepfermarkt-sindringen-2026
 ---
 
 In der Werkstatt von Francesca Buda entstehen auf der Drehscheibe geformte Unikate aus feinstem Porzellan – von feinem Gebrauchsgeschirr über filigrane Schmuckstücke bis zu organischen Skulpturen. Ihre Objekte vereinen italienische Formensprache mit handwerklicher Präzision.
