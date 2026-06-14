@@ -10,6 +10,8 @@ badges:
     end: "2026-06-21T17:00+02:00[Europe/Berlin]"
 lnglat: [9.6517736, 51.4185167]
 description: "Künstler, Handwerker und Designer bieten Unikate und Kleinserien an der Werra in Hann. Münden."
+artisans:
+  - "jasminkeramik"
 organizer: "hann-muenden-marketing"
 year: 2026
 ---
