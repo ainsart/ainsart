@@ -13,6 +13,7 @@ lnglat: [8.7105392, 51.7453595]
 organizer: "schlosspark-paderborn"
 year: 2026
 artisans:
+  - "keramik-frank-breiter"
   - "tito-keramik"
 ---
 
