@@ -12,6 +12,9 @@ description: "Zweitägiger Töpfermarkt rund um das Keramion in Frechen mit inte
 lnglat: [6.8082376, 50.9087843]
 organizer: "keramion"
 year: 2026
+artisans:
+  - "tito-keramik"
+  - "francesca-buda"
 ---
 
 Zweitägiger Töpfermarkt rund um das Keramion in Frechen. Aussteller präsentieren handgefertigte Keramik vor der Kulisse des markanten Museumsgebäudes. Das Keramion zeigt parallel Sonderausstellungen und seine Sammlung internationaler Studiokeramik.
