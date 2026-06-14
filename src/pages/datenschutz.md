@@ -10,7 +10,7 @@ title: Datenschutzerklärung
 **David Härer**  
 Nachtigallshof 16A  
 37077 Göttingen  
-E-Mail: david@haerer.dev
+E-Mail: david@ains.art
 
 ## 2. Erhebung und Verarbeitung personenbezogener Daten
 
