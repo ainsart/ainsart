@@ -77,5 +77,6 @@ description: "Traditioneller Weihnachtsmarkt in der Göttinger Altstadt mit fest
 organizer: "goettingen-marketing"
 year: 2026
 artisans:
+  - "jasminkeramik"
   - "tito-keramik"
 ---
