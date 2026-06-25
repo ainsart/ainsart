@@ -1,5 +1,21 @@
-node_modules/
-dist/
+# web (astro)
+web/node_modules/
+web/dist/
+web/.astro/
+
+# api (python)
+api/.venv/
+api/__pycache__/
+**/__pycache__/
+*.pyc
+.ruff_cache/
+
+# db
+db/*.sqlite
+db/*.sqlite-*
+db/*.db
+
+# misc
 *.log
 .DS_Store
 .env
